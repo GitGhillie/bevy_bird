@@ -1,9 +1,9 @@
-use bevy::ecs::system::Command;
+mod pipes;
+
 use bevy::pbr::DirectionalLightShadowMap;
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
-use bevy_xpbd_3d::math::PI;
-use bevy_xpbd_3d::prelude::*;
+use pipes::PipesMarker;
 
 pub struct ScenePlugin;
 
@@ -36,10 +36,6 @@ struct SceneAssets {
     pipe: Handle<Scene>,
 }
 
-#[derive(Component, Reflect, Default, Debug)]
-#[reflect(Component)]
-struct PipesMarker;
-
 fn setup(mut commands: Commands) {
     // todo: Disable physics while assets are loading
 
@@ -55,66 +51,11 @@ fn setup(mut commands: Commands) {
     });
 }
 
-struct SpawnPipe {
-    pub position_x: f32,
-}
-
-impl Command for SpawnPipe {
-    fn apply(self, world: &mut World) {
-        let assets = world.get_resource::<SceneAssets>();
-
-        if let Some(assets) = assets {
-            let collider_length = 10.0;
-            let pipe_gap_y = 3.0;
-
-            let pipe_handle = assets.pipe.clone_weak();
-
-            let transform_lower = Transform::from_xyz(0.0, 0.0, 0.0);
-            let mut transform_upper = Transform::from_xyz(0.0, pipe_gap_y, 0.0);
-            transform_upper.rotate_local_z(PI);
-
-            let parent_components = (
-                Name::from("PipeParent"),
-                PipesMarker,
-                VisibilityBundle::default(),
-                TransformBundle {
-                    local: Transform::from_xyz(self.position_x, 0.0, 0.0),
-                    ..default()
-                },
-            );
-
-            world.spawn(parent_components).with_children(|parent| {
-                let transforms = [transform_lower, transform_upper];
-                for transform in transforms {
-                    let pipe_components = (
-                        Name::from("Pipe"),
-                        RigidBody::Kinematic,
-                        SceneBundle {
-                            scene: pipe_handle.clone_weak(),
-                            transform,
-                            ..default()
-                        },
-                    );
-
-                    let collider_components = (
-                        Collider::cuboid(2.0, collider_length, 2.0),
-                        Transform::from_xyz(0.0, -collider_length / 2.0, 0.0),
-                    );
-
-                    parent.spawn(pipe_components).with_children(|parent| {
-                        parent.spawn(collider_components);
-                    });
-                }
-            });
-        }
-    }
-}
-
 fn spawn_level(mut commands: Commands) {
     let pipe_gap_x = 7.0;
 
     for i in 0..5 {
-        commands.add(SpawnPipe {
+        commands.add(pipes::SpawnPipe {
             position_x: i as f32 * pipe_gap_x,
         });
     }
