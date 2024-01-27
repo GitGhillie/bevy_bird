@@ -59,7 +59,7 @@ fn setup(
                 stacks: 8,
             })),
             material: materials.add(Color::rgb(0.8, 0.7, 0.9).into()),
-            transform: Transform::from_xyz(0.0, 4.0, 0.0),
+            transform: Transform::from_xyz(0.0, 2.0, 0.0),
             ..default()
         },
         InputManagerBundle::<inputs::Action> {
