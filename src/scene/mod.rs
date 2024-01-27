@@ -55,13 +55,25 @@ fn setup(mut commands: Commands) {
 }
 
 fn spawn_level(mut commands: Commands, scene_assets: Res<SceneAssets>) {
-    commands.spawn((
-        Name::from("Pipe"),
-        SceneBundle {
-            scene: scene_assets.pipe.clone_weak(),
-            ..default()
-        },
-        AsyncSceneCollider::new(Some(ComputedCollider::ConvexHull)),
-        RigidBody::Static,
-    ));
+    let parent = commands
+        .spawn((
+            Name::from("Pipe"),
+            SceneBundle {
+                scene: scene_assets.pipe.clone_weak(),
+                transform: Transform::from_xyz(0.0, 0.0, 0.0),
+                ..default()
+            },
+            RigidBody::Static,
+        ))
+        .id();
+
+    let collider_length = 10.0;
+    let child = commands
+        .spawn((
+            Collider::cuboid(2.0, collider_length, 2.0),
+            Transform::from_xyz(0.0, -collider_length / 2.0, 0.0),
+        ))
+        .id();
+
+    commands.entity(parent).add_child(child);
 }
