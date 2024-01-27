@@ -20,7 +20,7 @@ fn main() {
             level: bevy::log::Level::DEBUG,
         }))
         .add_plugins(PhysicsPlugins::default())
-        .add_plugins(PhysicsDebugPlugin::default())
+        //.add_plugins(PhysicsDebugPlugin::default())
         .add_plugins(player::PlayerPlugin)
         .add_plugins(scene::ScenePlugin)
         .add_plugins(WorldInspectorPlugin::default())

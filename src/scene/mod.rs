@@ -1,18 +1,13 @@
-mod lights;
-
 use bevy::pbr::DirectionalLightShadowMap;
 use bevy::prelude::*;
-use bevy::render::primitives::Aabb;
 use bevy_asset_loader::prelude::*;
-use bevy_scene_hook::{HookPlugin, HookedSceneBundle, SceneHook};
 use bevy_xpbd_3d::prelude::*;
 
 pub struct ScenePlugin;
 
 impl Plugin for ScenePlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(HookPlugin)
-            .insert_resource(DirectionalLightShadowMap { size: 4096 })
+        app.insert_resource(DirectionalLightShadowMap { size: 4096 })
             .add_state::<GameState>()
             .add_loading_state(
                 LoadingState::new(GameState::AssetLoading)
@@ -21,8 +16,7 @@ impl Plugin for ScenePlugin {
             )
             .register_type::<MarkerComponent>()
             .add_systems(Startup, setup)
-            .add_systems(OnEnter(GameState::AssetsLoaded), spawn_blockout)
-            .add_systems(Update, lights::replace_added_lights);
+            .add_systems(OnEnter(GameState::AssetsLoaded), spawn_level);
     }
 }
 
@@ -35,10 +29,10 @@ enum GameState {
 
 #[derive(AssetCollection, Resource)]
 struct SceneAssets {
-    #[asset(path = "levels/level1/blockout.glb#Scene0")]
-    blockout: Handle<Scene>,
-    #[asset(path = "levels/level1/detail.glb#Scene0")]
-    detail: Handle<Scene>,
+    #[asset(path = "objects/pipe.glb#Scene0")]
+    pipe: Handle<Scene>,
+    // #[asset(path = "levels/level1/detail.glb#Scene0")]
+    // detail: Handle<Scene>,
 }
 
 #[derive(Component, Reflect, Default, Debug)]
@@ -52,38 +46,22 @@ fn setup(mut commands: Commands) {
         transform: Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Vec3::Y),
         ..default()
     });
+
+    commands.spawn(DirectionalLightBundle {
+        transform: Transform::from_xyz(0.0, 1.0, 0.0)
+            .looking_at(Vec3::new(-0.8, 0.0, -0.4), Vec3::Z),
+        ..default()
+    });
 }
 
-fn spawn_blockout(mut commands: Commands, scene_assets: Res<SceneAssets>) {
+fn spawn_level(mut commands: Commands, scene_assets: Res<SceneAssets>) {
     commands.spawn((
-        Name::from("Blockout"),
+        Name::from("Pipe"),
         SceneBundle {
-            scene: scene_assets.blockout.clone_weak(),
+            scene: scene_assets.pipe.clone_weak(),
             ..default()
         },
         AsyncSceneCollider::new(Some(ComputedCollider::ConvexHull)),
         RigidBody::Static,
     ));
-
-    commands
-        .spawn(HookedSceneBundle {
-            scene: SceneBundle {
-                scene: scene_assets.detail.clone_weak(),
-                ..default()
-            },
-            hook: SceneHook::new(|entity, cmds| {
-                if let Some(name) = entity.get::<Name>() {
-                    // When importing from Blender each object will have a child with the actual mesh and Aabb.
-                    // However, we only want to add our component to the parent object, so early return.
-                    if entity.contains::<Aabb>() {
-                        return;
-                    }
-
-                    if name.starts_with("Suzanne") {
-                        cmds.insert(MarkerComponent);
-                    }
-                }
-            }),
-        })
-        .insert(Name::from("Detail"));
 }
