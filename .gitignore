@@ -1,0 +1,8 @@
+target/
+assets/
+.idea/
+.vscode/
+.DS_Store
+Cargo.lock
+
+dist/
