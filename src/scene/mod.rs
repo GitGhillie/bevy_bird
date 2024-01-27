@@ -31,8 +31,6 @@ enum GameState {
 struct SceneAssets {
     #[asset(path = "objects/pipe.glb#Scene0")]
     pipe: Handle<Scene>,
-    // #[asset(path = "levels/level1/detail.glb#Scene0")]
-    // detail: Handle<Scene>,
 }
 
 #[derive(Component, Reflect, Default, Debug)]
