@@ -49,10 +49,8 @@ fn setup(
         Player,
         RigidBody::Dynamic,
         GravityScale(4.0),
-        LockedAxes::new()
-            .lock_translation_x()
-            .lock_translation_z()
-            .lock_translation_y(), //todo remove
+        LockedAxes::new().lock_translation_x().lock_translation_z(),
+        //.lock_translation_y(), //todo remove
         LinearVelocity::ZERO,
         Collider::ball(0.5),
         PbrBundle {

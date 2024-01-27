@@ -5,6 +5,8 @@ use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
 use pipes::PipesMarker;
 
+use bevy_turborand::prelude::*;
+
 pub struct ScenePlugin;
 
 impl Plugin for ScenePlugin {
@@ -14,9 +16,11 @@ impl Plugin for ScenePlugin {
             .insert_resource(SceneSettings {
                 pipe_gap_x: 7.0,
                 pipe_gap_y: 3.0,
+                pipe_spread: 4.0,
                 pipe_speed: 10.0,
             })
             .insert_resource(DirectionalLightShadowMap { size: 4096 })
+            .insert_resource(GlobalRng::new())
             .add_state::<GameState>()
             .add_loading_state(
                 LoadingState::new(GameState::AssetLoading)
@@ -47,6 +51,7 @@ struct SceneAssets {
 pub struct SceneSettings {
     pipe_gap_x: f32,
     pipe_gap_y: f32,
+    pipe_spread: f32,
     pipe_speed: f32,
 }
 
@@ -118,14 +123,18 @@ fn move_pipes(
 fn recycle_pipes(
     mut pipe_query: Query<&mut Transform, With<PipesMarker>>,
     scene_settings: Res<SceneSettings>,
+    mut rng_resource: ResMut<GlobalRng>,
 ) {
     let num_pipes = pipe_query.iter().len() as f32;
     let pipe_gap_x = scene_settings.pipe_gap_x;
-    let out_of_view_bound = -1.0 * pipe_gap_x;
+    let out_of_view_bound = -2.0 * pipe_gap_x;
 
     for mut pipe_set in pipe_query.iter_mut() {
         if pipe_set.translation.x < out_of_view_bound {
-            pipe_set.translation.x = pipe_gap_x * (num_pipes - 1.0);
+            let random_num = rng_resource.f32();
+
+            pipe_set.translation.x = pipe_gap_x * (num_pipes - 2.0);
+            pipe_set.translation.y = (random_num * scene_settings.pipe_spread) - 2.0;
         }
     }
 }
