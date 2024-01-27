@@ -9,17 +9,23 @@ pub struct ScenePlugin;
 
 impl Plugin for ScenePlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(DirectionalLightShadowMap { size: 4096 })
+        app.register_type::<PipesMarker>()
+            .register_type::<SceneSettings>()
+            .insert_resource(SceneSettings {
+                pipe_gap_x: 7.0,
+                pipe_gap_y: 3.0,
+                pipe_speed: 10.0,
+            })
+            .insert_resource(DirectionalLightShadowMap { size: 4096 })
             .add_state::<GameState>()
             .add_loading_state(
                 LoadingState::new(GameState::AssetLoading)
                     .continue_to_state(GameState::AssetsLoaded)
                     .load_collection::<SceneAssets>(),
             )
-            .register_type::<PipesMarker>()
             .add_systems(Startup, setup)
             .add_systems(OnEnter(GameState::AssetsLoaded), spawn_level)
-            .add_systems(Update, move_pipes);
+            .add_systems(Update, (move_pipes, recycle_pipes));
     }
 }
 
@@ -34,6 +40,14 @@ enum GameState {
 struct SceneAssets {
     #[asset(path = "objects/pipe.glb#Scene0")]
     pipe: Handle<Scene>,
+}
+
+#[derive(Reflect, Resource, Default)]
+#[reflect(Resource)]
+pub struct SceneSettings {
+    pipe_gap_x: f32,
+    pipe_gap_y: f32,
+    pipe_speed: f32,
 }
 
 fn setup(
@@ -82,18 +96,36 @@ fn setup(
     ));
 }
 
-fn spawn_level(mut commands: Commands) {
-    let pipe_gap_x = 7.0;
-
+fn spawn_level(mut commands: Commands, scene_settings: Res<SceneSettings>) {
     for i in 0..5 {
         commands.add(pipes::SpawnPipe {
-            position_x: i as f32 * pipe_gap_x,
+            position_x: i as f32 * scene_settings.pipe_gap_x,
         });
     }
 }
 
-fn move_pipes(mut pipe_query: Query<&mut Transform, With<PipesMarker>>, time: Res<Time>) {
+fn move_pipes(
+    mut pipe_query: Query<&mut Transform, With<PipesMarker>>,
+    time: Res<Time>,
+    scene_settings: Res<SceneSettings>,
+) {
     for mut pipe_set in pipe_query.iter_mut() {
-        pipe_set.translation.x -= 10.0 * time.delta_seconds();
+        pipe_set.translation.x -= scene_settings.pipe_speed * time.delta_seconds();
+    }
+}
+
+// Respawn the pipes if they have gone off the screen past the player
+fn recycle_pipes(
+    mut pipe_query: Query<&mut Transform, With<PipesMarker>>,
+    scene_settings: Res<SceneSettings>,
+) {
+    let num_pipes = pipe_query.iter().len() as f32;
+    let pipe_gap_x = scene_settings.pipe_gap_x;
+    let out_of_view_bound = -1.0 * pipe_gap_x;
+
+    for mut pipe_set in pipe_query.iter_mut() {
+        if pipe_set.translation.x < out_of_view_bound {
+            pipe_set.translation.x = pipe_gap_x * (num_pipes - 1.0);
+        }
     }
 }

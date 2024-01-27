@@ -1,4 +1,4 @@
-use crate::scene::SceneAssets;
+use crate::scene::{SceneAssets, SceneSettings};
 use bevy::ecs::system::Command;
 use bevy::prelude::*;
 use bevy_xpbd_3d::components::{Collider, RigidBody};
@@ -15,15 +15,15 @@ pub struct SpawnPipe {
 impl Command for SpawnPipe {
     fn apply(self, world: &mut World) {
         let assets = world.get_resource::<SceneAssets>();
+        let scene_settings = world.get_resource::<SceneSettings>().unwrap();
 
         if let Some(assets) = assets {
             let collider_length = 10.0;
-            let pipe_gap_y = 3.0;
 
             let pipe_handle = assets.pipe.clone_weak();
 
             let transform_lower = Transform::from_xyz(0.0, 0.0, 0.0);
-            let mut transform_upper = Transform::from_xyz(0.0, pipe_gap_y, 0.0);
+            let mut transform_upper = Transform::from_xyz(0.0, scene_settings.pipe_gap_y, 0.0);
             transform_upper.rotate_local_z(PI);
 
             let parent_components = (
