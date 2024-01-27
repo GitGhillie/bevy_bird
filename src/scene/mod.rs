@@ -18,7 +18,8 @@ impl Plugin for ScenePlugin {
             )
             .register_type::<PipesMarker>()
             .add_systems(Startup, setup)
-            .add_systems(OnEnter(GameState::AssetsLoaded), spawn_level);
+            .add_systems(OnEnter(GameState::AssetsLoaded), spawn_level)
+            .add_systems(Update, move_pipes);
     }
 }
 
@@ -63,7 +64,7 @@ impl Command for SpawnPipe {
         let assets = world.get_resource::<SceneAssets>();
 
         if let Some(assets) = assets {
-            let collider_length = 5.0;
+            let collider_length = 10.0;
             let pipe_gap_y = 3.0;
 
             let pipe_handle = assets.pipe.clone_weak();
@@ -116,5 +117,11 @@ fn spawn_level(mut commands: Commands) {
         commands.add(SpawnPipe {
             position_x: i as f32 * pipe_gap_x,
         });
+    }
+}
+
+fn move_pipes(mut pipe_query: Query<&mut Transform, With<PipesMarker>>, time: Res<Time>) {
+    for mut pipe_set in pipe_query.iter_mut() {
+        pipe_set.translation.x -= 10.0 * time.delta_seconds();
     }
 }
