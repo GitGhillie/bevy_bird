@@ -29,7 +29,7 @@ impl Plugin for ScenePlugin {
             )
             .add_systems(Startup, setup)
             .add_systems(OnEnter(GameState::AssetsLoaded), spawn_level)
-            .add_systems(Update, (move_pipes, recycle_pipes));
+            .add_systems(Update, (recycle_pipes, move_pipes));
     }
 }
 

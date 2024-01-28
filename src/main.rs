@@ -10,6 +10,7 @@ mod scene;
 use bevy::log::LogPlugin;
 use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
+use bevy_screen_diagnostics::{ScreenDiagnosticsPlugin, ScreenFrameDiagnosticsPlugin};
 use bevy_xpbd_3d::prelude::*;
 
 fn main() {
@@ -19,8 +20,10 @@ fn main() {
                 "info,wgpu_core=warn,wgpu_hal=warn,mygame=debug,bevy_gltf_components=debug".into(),
             level: bevy::log::Level::DEBUG,
         }))
+        .add_plugins(ScreenDiagnosticsPlugin::default())
+        .add_plugins(ScreenFrameDiagnosticsPlugin)
         .add_plugins(PhysicsPlugins::default())
-        //.add_plugins(PhysicsDebugPlugin::default())
+        .add_plugins(PhysicsDebugPlugin::default())
         .add_plugins(player::PlayerPlugin)
         .add_plugins(scene::ScenePlugin)
         .add_plugins(WorldInspectorPlugin::default())

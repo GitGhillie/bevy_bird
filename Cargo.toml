@@ -17,10 +17,11 @@ opt-level = 3
 
 [dependencies]
 # TODO: Remove this before release!!!
-bevy = { version = "0.12", features = ["dynamic_linking", "jpeg"] }
-#bevy = { version = "0.12", features = ["jpeg"] }
+#bevy = { version = "0.12", features = ["dynamic_linking", "jpeg"] }
+bevy = { version = "0.12", features = ["jpeg"] }
 bevy_xpbd_3d = { version = "0.3", features = ["debug-plugin"] }
 leafwing-input-manager = "0.11"
 bevy-inspector-egui = "0.22"
 bevy_asset_loader = "0.19"
 bevy_turborand = "0.7"
+bevy_screen_diagnostics = "0.4"
