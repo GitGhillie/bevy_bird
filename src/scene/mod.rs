@@ -17,7 +17,7 @@ impl Plugin for ScenePlugin {
                 pipe_gap_x: 7.0,
                 pipe_gap_y: 3.0,
                 pipe_spread: 4.0,
-                pipe_speed: 10.0,
+                pipe_speed: 0.0,
             })
             .insert_resource(DirectionalLightShadowMap { size: 4096 })
             .insert_resource(GlobalRng::new())
@@ -52,7 +52,7 @@ pub struct SceneSettings {
     pipe_gap_x: f32,
     pipe_gap_y: f32,
     pipe_spread: f32,
-    pipe_speed: f32,
+    pub pipe_speed: f32,
 }
 
 fn setup(
@@ -104,7 +104,7 @@ fn setup(
 fn spawn_level(mut commands: Commands, scene_settings: Res<SceneSettings>) {
     for i in 0..5 {
         commands.add(pipes::SpawnPipe {
-            position_x: i as f32 * scene_settings.pipe_gap_x,
+            position_x: (i + 1) as f32 * scene_settings.pipe_gap_x,
         });
     }
 }

@@ -2,10 +2,11 @@ mod camera;
 mod controls;
 pub(crate) mod inputs;
 
+use crate::scene::SceneSettings;
 use bevy::prelude::*;
 use bevy::transform::TransformSystem::TransformPropagate;
 use bevy_xpbd_3d::components::{Collider, RigidBody};
-use bevy_xpbd_3d::prelude::{GravityScale, LinearVelocity, LockedAxes};
+use bevy_xpbd_3d::prelude::*;
 use bevy_xpbd_3d::PhysicsSet;
 use leafwing_input_manager::prelude::*;
 
@@ -24,8 +25,15 @@ impl Plugin for PlayerPlugin {
             .insert_resource(PlayerSettings {
                 jump_velocity: 10.0,
             })
+            .add_state::<GameState>()
             .add_systems(Startup, setup)
-            .add_systems(Update, controls::jump)
+            .add_systems(OnEnter(GameState::Playing), start_game)
+            .add_systems(OnEnter(GameState::Dead), end_game)
+            .add_systems(
+                PostUpdate,
+                controls::check_for_game_start.run_if(in_state(GameState::Ready)),
+            )
+            .add_systems(Update, (controls::jump, print_collisions)) //todo: Sometimes starting the game with jump will not actually jump the player
             .add_systems(
                 PostUpdate,
                 camera::follow_player
@@ -33,6 +41,14 @@ impl Plugin for PlayerPlugin {
                     .before(TransformPropagate),
             );
     }
+}
+
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
+enum GameState {
+    #[default]
+    Ready,
+    Playing,
+    Dead,
 }
 
 #[derive(Component, Default, Reflect)]
@@ -49,8 +65,10 @@ fn setup(
         Player,
         RigidBody::Dynamic,
         GravityScale(4.0),
-        LockedAxes::new().lock_translation_x().lock_translation_z(),
-        //.lock_translation_y(), //todo remove
+        LockedAxes::new()
+            .lock_translation_x()
+            .lock_translation_z()
+            .lock_translation_y(),
         LinearVelocity::ZERO,
         Collider::ball(0.5),
         PbrBundle {
@@ -68,4 +86,37 @@ fn setup(
             ..default()
         },
     ));
+}
+
+fn print_collisions(
+    collision_event_reader: EventReader<Collision>,
+    mut scene_settings: ResMut<SceneSettings>,
+    mut next_state: ResMut<NextState<GameState>>,
+) {
+    if !collision_event_reader.is_empty() {
+        scene_settings.pipe_speed = 0.0;
+        next_state.set(GameState::Dead);
+    }
+}
+
+fn start_game(
+    mut commands: Commands,
+    mut player_query: Query<Entity, With<LockedAxes>>,
+    mut scene_settings: ResMut<SceneSettings>,
+) {
+    for player in &mut player_query {
+        println!("Starting Game");
+        commands
+            .entity(player)
+            .insert(LockedAxes::new().lock_translation_x().lock_translation_z());
+        scene_settings.pipe_speed = 10.0;
+    }
+}
+
+fn end_game(mut player_query: Query<&mut LockedAxes>, mut scene_settings: ResMut<SceneSettings>) {
+    for player in &mut player_query {
+        println!("Ending game");
+        player.lock_translation_y();
+        scene_settings.pipe_speed = 0.0;
+    }
 }
