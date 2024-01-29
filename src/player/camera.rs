@@ -10,7 +10,5 @@ pub(crate) fn follow_player(
 
     let camera_offset = Vec3::new(-2.5, 4.5, 9.0);
 
-    camera_transform.translation = player_transform.translation() + camera_offset;
-
-    *camera_transform = camera_transform.looking_at(player_transform.translation(), Vec3::Y);
+    camera_transform.translation.y = player_transform.translation().y + camera_offset.y;
 }
