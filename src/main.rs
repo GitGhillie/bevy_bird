@@ -7,6 +7,7 @@
 mod player;
 mod scene;
 
+use bevy::asset::AssetMetaCheck;
 use bevy::log::LogPlugin;
 use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
@@ -14,6 +15,7 @@ use bevy_xpbd_3d::prelude::*;
 
 fn main() {
     App::new()
+        //.insert_resource(AssetMetaCheck::Never) // I think this is needed for a web release
         .add_plugins(DefaultPlugins.set(LogPlugin {
             filter:
                 "info,wgpu_core=warn,wgpu_hal=warn,mygame=debug,bevy_gltf_components=debug".into(),
