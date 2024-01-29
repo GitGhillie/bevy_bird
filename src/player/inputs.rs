@@ -1,4 +1,4 @@
-use bevy::prelude::{KeyCode, MouseButton, Reflect};
+use bevy::prelude::{GamepadButtonType, KeyCode, MouseButton, Reflect};
 use leafwing_input_manager::input_map::InputMap;
 use leafwing_input_manager::Actionlike;
 
@@ -15,6 +15,7 @@ pub(crate) fn create_input_map() -> InputMap<Action> {
 
     input_map.insert(KeyCode::Space, Action::Jump);
     input_map.insert(MouseButton::Left, Action::Jump);
+    input_map.insert(GamepadButtonType::South, Action::Jump);
 
     input_map
 }
