@@ -1,4 +1,4 @@
-mod pipes;
+pub(crate) mod pipes;
 
 use bevy::pbr::{DirectionalLightShadowMap, NotShadowCaster};
 use bevy::prelude::*;
@@ -23,7 +23,7 @@ impl Plugin for ScenePlugin {
             .insert_resource(GlobalRng::new())
             .add_state::<AssetState>()
             .add_loading_state(
-                AssetState::new(AssetState::Loading)
+                LoadingState::new(AssetState::Loading)
                     .continue_to_state(AssetState::Loaded)
                     .load_collection::<SceneAssets>(),
             )
@@ -101,7 +101,7 @@ fn setup(
     ));
 }
 
-fn spawn_level(mut commands: Commands, scene_settings: Res<SceneSettings>) {
+pub fn spawn_level(mut commands: Commands, scene_settings: Res<SceneSettings>) {
     for i in 0..5 {
         commands.add(pipes::SpawnPipe {
             position_x: (i + 1) as f32 * scene_settings.pipe_gap_x,

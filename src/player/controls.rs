@@ -23,6 +23,7 @@ pub fn check_for_game_start(
     let action_state = query.single();
 
     if action_state.just_pressed(Action::Jump) {
+        println!("Starting game after Jump");
         next_state.set(GameState::Playing);
     }
 }
