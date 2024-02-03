@@ -6,6 +6,9 @@ license = "MIT OR Apache-2.0"
 
 [features]
 default = []
+release_web = []
+release_desktop = []
+
 debugging = ["dep:bevy_screen_diagnostics", "dep:bevy-inspector-egui", "bevy_xpbd_3d/debug-plugin"]
 dynamic_linking = ["bevy/dynamic_linking"]
 
