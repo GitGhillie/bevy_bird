@@ -4,6 +4,11 @@ version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 
+[features]
+default = []
+debugging = ["dep:bevy_screen_diagnostics", "dep:bevy-inspector-egui", "bevy_xpbd_3d/debug-plugin"]
+dynamic_linking = ["bevy/dynamic_linking"]
+
 # Compile with Performance Optimizations:
 # https://bevyengine.org/learn/book/getting-started/setup/#compile-with-performance-optimizations
 
@@ -16,12 +21,10 @@ opt-level = 1
 opt-level = 3
 
 [dependencies]
-# TODO: Remove this before release!!!
-#bevy = { version = "0.12", features = ["dynamic_linking", "jpeg"] }
 bevy = { version = "0.12", features = ["jpeg"] }
-bevy_xpbd_3d = { version = "0.3", features = ["debug-plugin"] }
+bevy_xpbd_3d = { version = "0.3" }
 leafwing-input-manager = "0.11"
-bevy-inspector-egui = "0.22"
 bevy_asset_loader = "0.19"
 bevy_turborand = "0.7"
-bevy_screen_diagnostics = "0.4"
+bevy-inspector-egui = { version = "0.22", optional = true }
+bevy_screen_diagnostics = { version = "0.4", optional = true }

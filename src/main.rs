@@ -7,27 +7,36 @@
 mod player;
 mod scene;
 
-use bevy::asset::AssetMetaCheck;
 use bevy::log::LogPlugin;
 use bevy::prelude::*;
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
-use bevy_screen_diagnostics::{ScreenDiagnosticsPlugin, ScreenFrameDiagnosticsPlugin};
 use bevy_xpbd_3d::prelude::*;
 
+#[cfg(feature = "debugging")]
+use {
+    bevy_inspector_egui::quick::WorldInspectorPlugin,
+    bevy_screen_diagnostics::{ScreenDiagnosticsPlugin, ScreenFrameDiagnosticsPlugin},
+};
+
 fn main() {
-    App::new()
+    let mut app = App::new();
+    app
         //.insert_resource(AssetMetaCheck::Never) // I think this is needed for a web release
         .add_plugins(DefaultPlugins.set(LogPlugin {
             filter:
                 "info,wgpu_core=warn,wgpu_hal=warn,mygame=debug,bevy_gltf_components=debug".into(),
             level: bevy::log::Level::DEBUG,
         }))
-        .add_plugins(ScreenDiagnosticsPlugin::default())
-        .add_plugins(ScreenFrameDiagnosticsPlugin)
         .add_plugins(PhysicsPlugins::default())
-        .add_plugins(PhysicsDebugPlugin::default())
         .add_plugins(player::PlayerPlugin)
-        .add_plugins(scene::ScenePlugin)
-        .add_plugins(WorldInspectorPlugin::default())
-        .run();
+        .add_plugins(scene::ScenePlugin);
+
+    #[cfg(feature = "debugging")]
+    {
+        app.add_plugins(ScreenDiagnosticsPlugin::default())
+            .add_plugins(ScreenFrameDiagnosticsPlugin)
+            .add_plugins(PhysicsDebugPlugin::default())
+            .add_plugins(WorldInspectorPlugin::default());
+    }
+
+    app.run();
 }
