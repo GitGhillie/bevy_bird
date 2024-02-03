@@ -1,9 +1,9 @@
 target/
-assets/
 wasm/
 .idea/
 .vscode/
 .DS_Store
 Cargo.lock
+*.blend
 
 dist/
