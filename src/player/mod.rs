@@ -60,11 +60,7 @@ pub enum GameState {
 #[reflect(Component)]
 pub struct Player;
 
-fn setup(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
         Name::new("Player"),
         Player,
@@ -76,13 +72,8 @@ fn setup(
             .lock_translation_y(),
         LinearVelocity::ZERO,
         Collider::ball(0.5),
-        PbrBundle {
-            mesh: meshes.add(Mesh::from(shape::UVSphere {
-                radius: 0.5,
-                sectors: 16,
-                stacks: 8,
-            })),
-            material: materials.add(Color::rgb(0.8, 0.7, 0.9).into()),
+        SceneBundle {
+            scene: asset_server.load("objects/bird.glb#Scene0"),
             transform: Transform::from_xyz(0.0, 2.0, 0.0),
             ..default()
         },
