@@ -21,23 +21,23 @@ impl Plugin for ScenePlugin {
             })
             .insert_resource(DirectionalLightShadowMap { size: 4096 })
             .insert_resource(GlobalRng::new())
-            .add_state::<GameState>()
+            .add_state::<AssetState>()
             .add_loading_state(
-                LoadingState::new(GameState::AssetLoading)
-                    .continue_to_state(GameState::AssetsLoaded)
+                AssetState::new(AssetState::Loading)
+                    .continue_to_state(AssetState::Loaded)
                     .load_collection::<SceneAssets>(),
             )
             .add_systems(Startup, setup)
-            .add_systems(OnEnter(GameState::AssetsLoaded), spawn_level)
+            .add_systems(OnEnter(AssetState::Loaded), spawn_level)
             .add_systems(Update, (recycle_pipes, move_pipes));
     }
 }
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash, Default, States)]
-enum GameState {
+enum AssetState {
     #[default]
-    AssetLoading,
-    AssetsLoaded,
+    Loading,
+    Loaded,
 }
 
 #[derive(AssetCollection, Resource)]
