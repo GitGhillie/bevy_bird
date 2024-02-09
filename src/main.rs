@@ -1,9 +1,6 @@
-// Bevy code commonly triggers these lints and they may be important signals
-// about code quality. They are sometimes hard to avoid though, and the CI
-// workflow treats them as errors, so this allows them throughout the project.
-// Feel free to delete this line.
 #![allow(clippy::too_many_arguments, clippy::type_complexity)]
 
+mod gameplay;
 mod player;
 mod scene;
 
@@ -19,6 +16,7 @@ use {
 
 fn main() {
     let mut app = App::new();
+
     app
         //.insert_resource(AssetMetaCheck::Never) // I think this is needed for a web release
         .add_plugins(DefaultPlugins.set(LogPlugin {
@@ -28,7 +26,8 @@ fn main() {
         }))
         .add_plugins(PhysicsPlugins::default())
         .add_plugins(player::PlayerPlugin)
-        .add_plugins(scene::ScenePlugin);
+        .add_plugins(scene::ScenePlugin)
+        .add_plugins(gameplay::StateTransitionPlugin);
 
     #[cfg(feature = "debugging")]
     {

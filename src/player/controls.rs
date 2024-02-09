@@ -2,8 +2,9 @@ use bevy::prelude::*;
 use bevy_xpbd_3d::prelude::*;
 use leafwing_input_manager::prelude::*;
 
+use crate::gameplay::GameState;
 use crate::player::inputs::Action;
-use crate::player::{GameState, PlayerSettings};
+use crate::player::PlayerSettings;
 
 pub fn jump(
     mut query: Query<(&ActionState<Action>, &mut LinearVelocity)>,
