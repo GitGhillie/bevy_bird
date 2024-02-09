@@ -1,3 +1,4 @@
+use crate::player::PlayerSettings;
 use crate::scene::{spawn_level, SceneSettings};
 use bevy::prelude::*;
 use bevy_xpbd_3d::components::LockedAxes;
@@ -66,16 +67,18 @@ fn end_game(
     mut next_state: ResMut<NextState<GameState>>,
     mut commands: Commands,
     pipe_query: Query<Entity, With<crate::scene::pipes::PipesMarker>>,
+    player_settings: Res<PlayerSettings>,
 ) {
     println!("Ending game");
 
     for player in &mut player_query {
-        commands.entity(player).insert(
+        commands.entity(player).insert((
             LockedAxes::new()
                 .lock_translation_x()
                 .lock_translation_z()
                 .lock_translation_y(),
-        );
+            Transform::from_translation(player_settings.initial_position),
+        ));
     }
 
     next_state.set(GameState::Ready);

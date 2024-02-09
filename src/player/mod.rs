@@ -1,7 +1,6 @@
 pub(crate) mod controls;
 pub(crate) mod inputs;
 
-use crate::scene::{spawn_level, SceneSettings};
 use bevy::prelude::*;
 use bevy_xpbd_3d::components::{Collider, RigidBody};
 use bevy_xpbd_3d::prelude::*;
@@ -10,6 +9,7 @@ use leafwing_input_manager::prelude::*;
 #[derive(Reflect, Resource, Default)]
 #[reflect(Resource)]
 pub struct PlayerSettings {
+    pub(crate) initial_position: Vec3,
     jump_velocity: f32,
 }
 
@@ -21,6 +21,7 @@ impl Plugin for PlayerPlugin {
             .register_type::<PlayerSettings>()
             .insert_resource(PlayerSettings {
                 jump_velocity: 10.0,
+                initial_position: Vec3::new(0.0, 1.0, 0.0),
             })
             .add_systems(Startup, setup);
     }
@@ -30,7 +31,11 @@ impl Plugin for PlayerPlugin {
 #[reflect(Component)]
 pub struct Player;
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn setup(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    player_settings: Res<PlayerSettings>,
+) {
     commands.spawn((
         Name::new("Player"),
         Player,
@@ -44,7 +49,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         Collider::ball(0.5),
         SceneBundle {
             scene: asset_server.load("objects/bird.glb#Scene0"),
-            transform: Transform::from_xyz(0.0, 2.0, 0.0),
+            transform: Transform::from_translation(player_settings.initial_position),
             ..default()
         },
         InputManagerBundle::<inputs::Action> {
