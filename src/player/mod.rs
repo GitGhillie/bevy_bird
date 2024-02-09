@@ -1,13 +1,10 @@
-mod camera;
 mod controls;
 pub(crate) mod inputs;
 
 use crate::scene::{spawn_level, SceneSettings};
 use bevy::prelude::*;
-use bevy::transform::TransformSystem::TransformPropagate;
 use bevy_xpbd_3d::components::{Collider, RigidBody};
 use bevy_xpbd_3d::prelude::*;
-use bevy_xpbd_3d::PhysicsSet;
 use leafwing_input_manager::prelude::*;
 
 #[derive(Reflect, Resource, Default)]
@@ -38,12 +35,6 @@ impl Plugin for PlayerPlugin {
             .add_systems(
                 Update,
                 check_for_collisions.run_if(in_state(GameState::Playing)),
-            )
-            .add_systems(
-                PostUpdate,
-                camera::follow_player
-                    .after(PhysicsSet::Sync)
-                    .before(TransformPropagate),
             );
     }
 }
