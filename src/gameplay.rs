@@ -1,7 +1,7 @@
 use crate::player::PlayerSettings;
 use crate::scene::{spawn_level, SceneSettings};
 use bevy::prelude::*;
-use bevy_xpbd_3d::components::LockedAxes;
+use bevy_xpbd_3d::components::{LinearVelocity, LockedAxes};
 use bevy_xpbd_3d::prelude::Collision;
 
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
@@ -21,10 +21,13 @@ impl Plugin for StateTransitionPlugin {
             .add_systems(OnEnter(GameState::Playing), start_game)
             .add_systems(OnEnter(GameState::Dead), end_game)
             .add_systems(
-                PostUpdate,
+                Update,
                 crate::player::controls::check_for_game_start.run_if(in_state(GameState::Ready)),
             )
-            .add_systems(Update, crate::player::controls::jump) //todo: Sometimes starting the game with jump will not actually jump the player
+            .add_systems(
+                Update,
+                crate::player::controls::jump.run_if(in_state(GameState::Playing)),
+            )
             .add_systems(
                 Update,
                 check_for_collisions.run_if(in_state(GameState::Playing)),
@@ -34,16 +37,20 @@ impl Plugin for StateTransitionPlugin {
 
 fn start_game(
     mut commands: Commands,
-    mut player_query: Query<Entity, With<LockedAxes>>,
+    mut player_query: Query<(Entity, &mut LinearVelocity), With<LockedAxes>>,
     mut scene_settings: ResMut<SceneSettings>,
+    player_settings: Res<PlayerSettings>,
 ) {
-    println!("Starting Game");
     scene_settings.pipe_speed = 10.0;
 
-    for player in &mut player_query {
+    for (player, mut velocity) in &mut player_query {
         commands
             .entity(player)
             .insert(LockedAxes::new().lock_translation_x().lock_translation_z());
+
+        // We need to jump when starting the game since the jump action is 'used up' when
+        // checking for the state transition from `Ready` to `Playing`.
+        velocity.y = player_settings.jump_velocity;
     }
 }
 
@@ -55,7 +62,6 @@ fn check_for_collisions(
     if !collision_event_reader.is_empty() {
         // Drain events so they don't cause issues later
         for _ in collision_event_reader.read() {}
-        println!("Ending game after collision");
 
         scene_settings.pipe_speed = 0.0;
         next_state.set(GameState::Dead);
@@ -69,8 +75,6 @@ fn end_game(
     pipe_query: Query<Entity, With<crate::scene::pipes::PipesMarker>>,
     player_settings: Res<PlayerSettings>,
 ) {
-    println!("Ending game");
-
     for player in &mut player_query {
         commands.entity(player).insert((
             LockedAxes::new()

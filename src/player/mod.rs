@@ -9,8 +9,8 @@ use leafwing_input_manager::prelude::*;
 #[derive(Reflect, Resource, Default)]
 #[reflect(Resource)]
 pub struct PlayerSettings {
-    pub(crate) initial_position: Vec3,
-    jump_velocity: f32,
+    pub initial_position: Vec3,
+    pub jump_velocity: f32,
 }
 
 pub struct PlayerPlugin;
