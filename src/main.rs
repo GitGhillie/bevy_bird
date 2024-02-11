@@ -3,6 +3,7 @@
 mod gameplay;
 mod player;
 mod scene;
+mod ui;
 
 use bevy::log::LogPlugin;
 use bevy::prelude::*;
@@ -27,7 +28,8 @@ fn main() {
         .add_plugins(PhysicsPlugins::default())
         .add_plugins(player::PlayerPlugin)
         .add_plugins(scene::ScenePlugin)
-        .add_plugins(gameplay::StateTransitionPlugin);
+        .add_plugins(gameplay::StateTransitionPlugin)
+        .add_plugins(ui::ScoreTextPlugin);
 
     #[cfg(feature = "debugging")]
     {
