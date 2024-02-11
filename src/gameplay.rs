@@ -1,4 +1,5 @@
 use crate::player::PlayerSettings;
+use crate::scene::pipes::PipesMarker;
 use crate::scene::{spawn_level, SceneSettings};
 use bevy::prelude::*;
 use bevy_xpbd_3d::components::{LinearVelocity, LockedAxes};
@@ -12,11 +13,22 @@ pub enum GameState {
     Dead,
 }
 
+#[derive(Resource, Default)]
+struct ScoreInfo {
+    current_score: u32,
+    high_score: u32,
+}
+
+// Indicates if a pipe has passed the player
+#[derive(Component)]
+struct Scored;
+
 pub struct StateTransitionPlugin;
 
 impl Plugin for StateTransitionPlugin {
     fn build(&self, app: &mut App) {
         app.add_state::<GameState>()
+            .insert_resource(ScoreInfo::default())
             .add_systems(OnEnter(GameState::Ready), spawn_level)
             .add_systems(OnEnter(GameState::Playing), start_game)
             .add_systems(OnEnter(GameState::Dead), end_game)
@@ -31,7 +43,8 @@ impl Plugin for StateTransitionPlugin {
             .add_systems(
                 Update,
                 check_for_collisions.run_if(in_state(GameState::Playing)),
-            );
+            )
+            .add_systems(Update, scoring);
     }
 }
 
@@ -40,8 +53,10 @@ fn start_game(
     mut player_query: Query<(Entity, &mut LinearVelocity), With<LockedAxes>>,
     mut scene_settings: ResMut<SceneSettings>,
     player_settings: Res<PlayerSettings>,
+    mut score_info: ResMut<ScoreInfo>,
 ) {
     scene_settings.pipe_speed = 10.0;
+    score_info.current_score = 0;
 
     for (player, mut velocity) in &mut player_query {
         commands
@@ -72,7 +87,7 @@ fn end_game(
     mut player_query: Query<Entity, With<LockedAxes>>,
     mut next_state: ResMut<NextState<GameState>>,
     mut commands: Commands,
-    pipe_query: Query<Entity, With<crate::scene::pipes::PipesMarker>>,
+    pipe_query: Query<Entity, With<PipesMarker>>,
     player_settings: Res<PlayerSettings>,
 ) {
     for player in &mut player_query {
@@ -89,5 +104,38 @@ fn end_game(
 
     for ent in pipe_query.iter() {
         commands.entity(ent).despawn_recursive();
+    }
+}
+
+fn scoring(
+    mut commands: Commands,
+    pipe_query: Query<(Entity, &Transform), (With<PipesMarker>, Without<Scored>)>,
+    scored_pipe_query: Query<(Entity, &Transform), With<Scored>>,
+    mut score_info: ResMut<ScoreInfo>,
+) {
+    let score_boundary = 0.0;
+
+    for (pipe_entity, pipe_transform) in &pipe_query {
+        if pipe_transform.translation.x < score_boundary {
+            commands.entity(pipe_entity).insert(Scored);
+
+            score_info.current_score += 1;
+
+            if score_info.current_score > score_info.high_score {
+                score_info.high_score = score_info.current_score;
+            }
+
+            #[cfg(feature = "debugging")]
+            println!(
+                "PB: {}, Current Score: {}",
+                score_info.high_score, score_info.current_score
+            );
+        }
+    }
+
+    for (pipe_entity, pipe_transform) in &scored_pipe_query {
+        if pipe_transform.translation.x > score_boundary + 1.0 {
+            commands.entity(pipe_entity).remove::<Scored>();
+        }
     }
 }
