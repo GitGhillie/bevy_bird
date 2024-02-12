@@ -24,10 +24,36 @@ opt-level = 1
 opt-level = 3
 
 [dependencies]
-bevy = { version = "0.12", features = ["jpeg"] }
 bevy_xpbd_3d = { version = "0.3" }
 leafwing-input-manager = "0.11"
 bevy_asset_loader = "0.19"
 bevy_turborand = "0.7"
 bevy-inspector-egui = { version = "0.22", optional = true }
 bevy_screen_diagnostics = { version = "0.4", optional = true }
+
+# todo: check if there are any more features that can be disabled
+[dependencies.bevy]
+version = "0.12"
+default-features = false
+features = [
+    "bevy_asset",
+    "bevy_gilrs",
+    "bevy_scene",
+    "bevy_winit",
+    "bevy_core_pipeline",
+    "bevy_pbr",
+    "bevy_gltf",
+    "bevy_render",
+    "bevy_text",
+    "bevy_ui",
+    "multi-threaded",
+    "png",
+    "hdr",
+#    "vorbis",
+    "x11",
+    "bevy_gizmos",
+#    "android_shared_stdcxx",
+    "tonemapping_luts",
+    "default_font",
+    "webgl2",
+]
