@@ -1,3 +1,4 @@
+use crate::gameplay::{ScoreInfo, ScoredEvent};
 use bevy::prelude::*;
 
 pub struct ScoreTextPlugin;
@@ -15,7 +16,7 @@ struct TextMarker;
 fn setup(mut commands: Commands) {
     commands.spawn((
         TextBundle::from_section(
-            "42",
+            "0",
             TextStyle {
                 font_size: 100.0,
                 color: Color::GOLD,
@@ -32,10 +33,14 @@ fn setup(mut commands: Commands) {
     ));
 }
 
-fn update_score(mut query: Query<&mut Text, With<TextMarker>>, mut local: Local<u32>) {
-    *local += 1;
-
-    for mut text in &mut query {
-        text.sections[0].value = format!("{num}", num = *local);
+fn update_score(
+    mut query: Query<&mut Text, With<TextMarker>>,
+    mut scored_event: EventReader<ScoredEvent>,
+    score_info: Res<ScoreInfo>,
+) {
+    for _ in scored_event.read() {
+        for mut text in &mut query {
+            text.sections[0].value = format!("{num}", num = score_info.current_score);
+        }
     }
 }

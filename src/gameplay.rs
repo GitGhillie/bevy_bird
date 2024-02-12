@@ -14,14 +14,17 @@ pub enum GameState {
 }
 
 #[derive(Resource, Default)]
-struct ScoreInfo {
-    current_score: u32,
-    high_score: u32,
+pub struct ScoreInfo {
+    pub current_score: u32,
+    pub high_score: u32,
 }
 
 // Indicates if a pipe has passed the player
 #[derive(Component)]
 struct Scored;
+
+#[derive(Event)]
+pub struct ScoredEvent;
 
 pub struct StateTransitionPlugin;
 
@@ -29,6 +32,7 @@ impl Plugin for StateTransitionPlugin {
     fn build(&self, app: &mut App) {
         app.add_state::<GameState>()
             .insert_resource(ScoreInfo::default())
+            .add_event::<ScoredEvent>()
             .add_systems(OnEnter(GameState::Ready), spawn_level)
             .add_systems(OnEnter(GameState::Playing), start_game)
             .add_systems(OnEnter(GameState::Dead), end_game)
@@ -112,6 +116,7 @@ fn scoring(
     pipe_query: Query<(Entity, &Transform), (With<PipesMarker>, Without<Scored>)>,
     scored_pipe_query: Query<(Entity, &Transform), With<Scored>>,
     mut score_info: ResMut<ScoreInfo>,
+    mut scored_event: EventWriter<ScoredEvent>,
 ) {
     let score_boundary = 0.0;
 
@@ -124,6 +129,8 @@ fn scoring(
             if score_info.current_score > score_info.high_score {
                 score_info.high_score = score_info.current_score;
             }
+
+            scored_event.send(ScoredEvent);
 
             #[cfg(feature = "debugging")]
             println!(

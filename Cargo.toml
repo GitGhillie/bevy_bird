@@ -12,6 +12,8 @@ release_desktop = []
 debugging = ["dep:bevy_screen_diagnostics", "dep:bevy-inspector-egui", "bevy_xpbd_3d/debug-plugin"]
 dynamic_linking = ["bevy/dynamic_linking"]
 
+# todo: Check https://github.com/tbillington/bevy_best_practices build settings for release
+
 # Compile with Performance Optimizations:
 # https://bevyengine.org/learn/book/getting-started/setup/#compile-with-performance-optimizations
 
