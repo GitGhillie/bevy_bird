@@ -22,15 +22,16 @@ fn main() {
     app
         //.insert_resource(AssetMetaCheck::Never) // I think this is needed for a web release
         .add_plugins(DefaultPlugins.set(LogPlugin {
-            filter:
-                "info,wgpu_core=warn,wgpu_hal=warn,mygame=debug,bevy_gltf_components=debug".into(),
+            filter: "info,wgpu_core=warn,wgpu_hal=warn,mygame=debug,bevy_winit=warn".into(),
             level: bevy::log::Level::DEBUG,
         }))
+        // .add_plugins(DefaultPlugins)
         .add_plugins(PhysicsPlugins::default())
         .add_plugins(player::PlayerPlugin)
         .add_plugins(scene::ScenePlugin)
         .add_plugins(gameplay::StateTransitionPlugin)
-        .add_plugins(ui::ScoreTextPlugin);
+        .add_plugins(ui::ScoreTextPlugin)
+        .add_plugins(audio::GameAudioPlugin);
 
     #[cfg(feature = "debugging")]
     {

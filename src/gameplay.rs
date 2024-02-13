@@ -26,6 +26,9 @@ struct Scored;
 #[derive(Event)]
 pub struct ScoredEvent;
 
+#[derive(Event)]
+pub struct JumpedEvent;
+
 pub struct StateTransitionPlugin;
 
 impl Plugin for StateTransitionPlugin {
@@ -33,6 +36,7 @@ impl Plugin for StateTransitionPlugin {
         app.add_state::<GameState>()
             .insert_resource(ScoreInfo::default())
             .add_event::<ScoredEvent>()
+            .add_event::<JumpedEvent>()
             .add_systems(OnEnter(GameState::Ready), spawn_level)
             .add_systems(OnEnter(GameState::Playing), start_game)
             .add_systems(OnEnter(GameState::Dead), end_game)
