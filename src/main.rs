@@ -1,5 +1,6 @@
 #![allow(clippy::too_many_arguments, clippy::type_complexity)]
 
+mod audio;
 mod gameplay;
 mod player;
 mod scene;

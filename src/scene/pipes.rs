@@ -6,13 +6,13 @@ use bevy_xpbd_3d::math::PI;
 
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]
-pub struct PipesMarker;
+pub struct PipePair;
 
-pub struct SpawnPipe {
+pub struct SpawnPipePair {
     pub position_x: f32,
 }
 
-impl Command for SpawnPipe {
+impl Command for SpawnPipePair {
     fn apply(self, world: &mut World) {
         let assets = world.get_resource::<SceneAssets>();
         let scene_settings = world.get_resource::<SceneSettings>().unwrap();
@@ -27,8 +27,8 @@ impl Command for SpawnPipe {
             transform_upper.rotate_local_z(PI);
 
             let parent_components = (
-                Name::from("PipeParent"),
-                PipesMarker,
+                Name::from("PipePair"),
+                PipePair,
                 VisibilityBundle::default(),
                 TransformBundle {
                     local: Transform::from_xyz(self.position_x, 0.0, 0.0),

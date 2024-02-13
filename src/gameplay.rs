@@ -1,5 +1,5 @@
 use crate::player::PlayerSettings;
-use crate::scene::pipes::PipesMarker;
+use crate::scene::pipes::PipePair;
 use crate::scene::{spawn_level, SceneSettings};
 use bevy::prelude::*;
 use bevy_xpbd_3d::components::{LinearVelocity, LockedAxes};
@@ -91,7 +91,7 @@ fn end_game(
     mut player_query: Query<Entity, With<LockedAxes>>,
     mut next_state: ResMut<NextState<GameState>>,
     mut commands: Commands,
-    pipe_query: Query<Entity, With<PipesMarker>>,
+    pipe_query: Query<Entity, With<PipePair>>,
     player_settings: Res<PlayerSettings>,
 ) {
     for player in &mut player_query {
@@ -113,7 +113,7 @@ fn end_game(
 
 fn scoring(
     mut commands: Commands,
-    pipe_query: Query<(Entity, &Transform), (With<PipesMarker>, Without<Scored>)>,
+    pipe_query: Query<(Entity, &Transform), (With<PipePair>, Without<Scored>)>,
     scored_pipe_query: Query<(Entity, &Transform), With<Scored>>,
     mut score_info: ResMut<ScoreInfo>,
     mut scored_event: EventWriter<ScoredEvent>,

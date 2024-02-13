@@ -3,7 +3,7 @@ pub(crate) mod pipes;
 use bevy::pbr::{DirectionalLightShadowMap, NotShadowCaster};
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
-use pipes::PipesMarker;
+use pipes::PipePair;
 
 use bevy_turborand::prelude::*;
 
@@ -11,7 +11,7 @@ pub struct ScenePlugin;
 
 impl Plugin for ScenePlugin {
     fn build(&self, app: &mut App) {
-        app.register_type::<PipesMarker>()
+        app.register_type::<PipePair>()
             .register_type::<SceneSettings>()
             .insert_resource(SceneSettings {
                 pipe_gap_x: 7.0,
@@ -104,14 +104,14 @@ fn setup(
 
 pub fn spawn_level(mut commands: Commands, scene_settings: Res<SceneSettings>) {
     for i in 0..5 {
-        commands.add(pipes::SpawnPipe {
+        commands.add(pipes::SpawnPipePair {
             position_x: (i + 1) as f32 * scene_settings.pipe_gap_x,
         });
     }
 }
 
 fn move_pipes(
-    mut pipe_query: Query<&mut Transform, With<PipesMarker>>,
+    mut pipe_query: Query<&mut Transform, With<PipePair>>,
     time: Res<Time>,
     scene_settings: Res<SceneSettings>,
 ) {
@@ -122,7 +122,7 @@ fn move_pipes(
 
 // Respawn the pipes if they have gone off the screen past the player
 fn recycle_pipes(
-    mut pipe_query: Query<&mut Transform, With<PipesMarker>>,
+    mut pipe_query: Query<&mut Transform, With<PipePair>>,
     scene_settings: Res<SceneSettings>,
     mut rng_resource: ResMut<GlobalRng>,
 ) {

@@ -29,11 +29,12 @@ opt-level = 3
 bevy_xpbd_3d = { version = "0.3" }
 leafwing-input-manager = "0.11"
 bevy_asset_loader = "0.19"
+bevy_kira_audio = "0.18"
 bevy_turborand = "0.7"
 bevy-inspector-egui = { version = "0.22", optional = true }
 bevy_screen_diagnostics = { version = "0.4", optional = true }
 
-# todo: check if there are any more features that can be disabled
+# todo: check if there are any more features that can be disabled (per platform as well?)
 [dependencies.bevy]
 version = "0.12"
 default-features = false
@@ -50,6 +51,7 @@ features = [
     "bevy_ui",
     "multi-threaded",
     "png",
+    "jpeg",
     "hdr",
 #    "vorbis",
     "x11",
