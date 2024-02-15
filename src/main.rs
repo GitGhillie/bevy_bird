@@ -6,7 +6,6 @@ mod player;
 mod scene;
 mod ui;
 
-use bevy::log::LogPlugin;
 use bevy::prelude::*;
 use bevy_xpbd_3d::prelude::*;
 
@@ -21,11 +20,7 @@ fn main() {
 
     app
         //.insert_resource(AssetMetaCheck::Never) // I think this is needed for a web release
-        .add_plugins(DefaultPlugins.set(LogPlugin {
-            filter: "info,wgpu_core=warn,wgpu_hal=warn,mygame=debug,bevy_winit=warn".into(),
-            level: bevy::log::Level::DEBUG,
-        }))
-        // .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins)
         .add_plugins(PhysicsPlugins::default())
         .add_plugins(player::PlayerPlugin)
         .add_plugins(scene::ScenePlugin)
