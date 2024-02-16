@@ -71,6 +71,8 @@ fn start_game(
             LockedAxes::new()
                 .lock_translation_x()
                 .lock_translation_z()
+                .lock_rotation_x()
+                .lock_rotation_y()
                 .lock_rotation_z(),
         );
 

@@ -2,9 +2,7 @@ pub(crate) mod controls;
 pub(crate) mod inputs;
 
 use crate::gameplay::JumpedEvent;
-use bevy::pbr::NotShadowCaster;
 use bevy::prelude::*;
-use bevy_kira_audio::Audio;
 use bevy_xpbd_3d::components::{Collider, RigidBody};
 use bevy_xpbd_3d::prelude::*;
 use leafwing_input_manager::prelude::*;

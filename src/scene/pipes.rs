@@ -10,6 +10,7 @@ pub struct PipePair;
 
 pub struct SpawnPipePair {
     pub position_x: f32,
+    pub rotation: f32,
 }
 
 impl Command for SpawnPipePair {
@@ -26,12 +27,15 @@ impl Command for SpawnPipePair {
             let mut transform_upper = Transform::from_xyz(0.0, scene_settings.pipe_gap_y, 0.0);
             transform_upper.rotate_local_z(PI);
 
+            let mut parent_transform = Transform::from_xyz(self.position_x, 0.0, 0.0);
+            parent_transform.rotate_local_y(self.rotation);
+
             let parent_components = (
                 Name::from("PipePair"),
                 PipePair,
                 VisibilityBundle::default(),
                 TransformBundle {
-                    local: Transform::from_xyz(self.position_x, 0.0, 0.0),
+                    local: parent_transform,
                     ..default()
                 },
             );

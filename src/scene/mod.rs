@@ -114,6 +114,7 @@ pub fn spawn_level(mut commands: Commands, scene_settings: Res<SceneSettings>) {
     for i in 0..5 {
         commands.add(pipes::SpawnPipePair {
             position_x: (i + 1) as f32 * scene_settings.pipe_gap_x,
+            rotation: i as f32 * 90.0,
         });
     }
 }
