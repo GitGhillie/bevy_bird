@@ -67,9 +67,12 @@ fn start_game(
     score_info.current_score = 0;
 
     for (player, mut velocity) in &mut player_query {
-        commands
-            .entity(player)
-            .insert(LockedAxes::new().lock_translation_x().lock_translation_z());
+        commands.entity(player).insert(
+            LockedAxes::new()
+                .lock_translation_x()
+                .lock_translation_z()
+                .lock_rotation_z(),
+        );
 
         // We need to jump when starting the game since the jump action is 'used up' when
         // checking for the state transition from `Ready` to `Playing`.

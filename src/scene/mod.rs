@@ -19,6 +19,10 @@ impl Plugin for ScenePlugin {
                 pipe_spread: 4.0,
                 pipe_speed: 0.0,
             })
+            .insert_resource(AmbientLight {
+                color: Color::WHITE,
+                brightness: 0.25,
+            })
             .insert_resource(DirectionalLightShadowMap { size: 4096 })
             .insert_resource(GlobalRng::new())
             .add_state::<AssetState>()
@@ -82,7 +86,11 @@ fn setup(
 
     commands.spawn(DirectionalLightBundle {
         transform: Transform::from_xyz(0.0, 1.0, 0.0)
-            .looking_at(Vec3::new(-0.4, 0.5, -0.4), Vec3::Z),
+            .looking_at(Vec3::new(-0.25, 0.0, -0.05), Vec3::Z),
+        directional_light: DirectionalLight {
+            shadows_enabled: true,
+            ..default()
+        },
         ..default()
     });
 
@@ -105,7 +113,7 @@ fn setup(
 pub fn spawn_level(mut commands: Commands, scene_settings: Res<SceneSettings>) {
     for i in 0..5 {
         commands.add(pipes::SpawnPipePair {
-            position_x: (i + 1) as f32 * scene_settings.pipe_gap_x,
+            position_x: (i) as f32 * scene_settings.pipe_gap_x,
         });
     }
 }
