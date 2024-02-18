@@ -56,7 +56,7 @@ impl Plugin for StateTransitionPlugin {
             )
             .add_systems(
                 Update,
-                check_for_collisions.run_if(in_state(GameState::Playing)),
+                (check_for_collisions, ramp_up_speed).run_if(in_state(GameState::Playing)),
             )
             .add_systems(Update, scoring);
     }
@@ -69,7 +69,7 @@ fn start_game(
     player_settings: Res<PlayerSettings>,
     mut score_info: ResMut<ScoreInfo>,
 ) {
-    scene_settings.pipe_speed = 10.0;
+    scene_settings.pipe_speed = 5.0;
     score_info.current_score = 0;
 
     for (player, mut velocity) in &mut player_query {
@@ -85,6 +85,12 @@ fn start_game(
         // We need to jump when starting the game since the jump action is 'used up' when
         // checking for the state transition from `Ready` to `Playing`.
         velocity.y = player_settings.jump_velocity;
+    }
+}
+
+fn ramp_up_speed(mut scene_settings: ResMut<SceneSettings>, time: Res<Time>) {
+    if scene_settings.pipe_speed < 10.0 {
+        scene_settings.pipe_speed += 0.4 * time.delta_seconds();
     }
 }
 

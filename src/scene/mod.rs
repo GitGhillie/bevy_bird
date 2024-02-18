@@ -15,7 +15,7 @@ impl Plugin for ScenePlugin {
             .register_type::<SceneSettings>()
             .insert_resource(SceneSettings {
                 pipe_gap_x: 7.0,
-                pipe_gap_y: 3.0,
+                pipe_gap_y: 3.1,
                 pipe_spread: 4.0,
                 pipe_speed: 0.0,
             })
