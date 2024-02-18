@@ -26,7 +26,12 @@ fn main() {
         .add_plugins(scene::ScenePlugin)
         .add_plugins(gameplay::StateTransitionPlugin)
         .add_plugins(ui::ScoreTextPlugin)
-        .add_plugins(audio::GameAudioPlugin);
+        .add_plugins(audio::GameAudioPlugin)
+        .add_plugins(bevy_mod_mipmap_generator::MipmapGeneratorPlugin)
+        .add_systems(
+            Update,
+            bevy_mod_mipmap_generator::generate_mipmaps::<StandardMaterial>,
+        );
 
     #[cfg(feature = "debugging")]
     {

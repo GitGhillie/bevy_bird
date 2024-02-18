@@ -33,6 +33,7 @@ bevy_kira_audio = "0.18"
 bevy_turborand = "0.7"
 bevy-inspector-egui = { version = "0.22", optional = true }
 bevy_screen_diagnostics = { version = "0.4", optional = true }
+bevy_mod_mipmap_generator = { git = "https://github.com/DGriffin91/bevy_mod_mipmap_generator.git", rev = "b15acd3"}
 
 # todo: check if there are any more features that can be disabled (per platform as well?)
 [dependencies.bevy]
