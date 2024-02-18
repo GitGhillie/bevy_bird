@@ -2,8 +2,10 @@ use crate::player::PlayerSettings;
 use crate::scene::pipes::PipePair;
 use crate::scene::{spawn_level, SceneSettings};
 use bevy::prelude::*;
+use bevy::time::common_conditions::on_timer;
 use bevy_xpbd_3d::components::{LinearVelocity, LockedAxes};
 use bevy_xpbd_3d::prelude::Collision;
+use std::time::Duration;
 
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
 pub enum GameState {
@@ -39,7 +41,11 @@ impl Plugin for StateTransitionPlugin {
             .add_event::<JumpedEvent>()
             .add_systems(OnEnter(GameState::Ready), spawn_level)
             .add_systems(OnEnter(GameState::Playing), start_game)
-            .add_systems(OnEnter(GameState::Dead), end_game)
+            .add_systems(
+                Update,
+                end_game
+                    .run_if(in_state(GameState::Dead).and_then(on_timer(Duration::from_secs(1)))),
+            )
             .add_systems(
                 Update,
                 crate::player::controls::check_for_game_start.run_if(in_state(GameState::Ready)),
@@ -86,12 +92,19 @@ fn check_for_collisions(
     mut collision_event_reader: EventReader<Collision>,
     mut scene_settings: ResMut<SceneSettings>,
     mut next_state: ResMut<NextState<GameState>>,
+    mut player_query: Query<Entity, With<LockedAxes>>,
+    mut commands: Commands,
 ) {
     if !collision_event_reader.is_empty() {
         // Drain events so they don't cause issues later
         for _ in collision_event_reader.read() {}
 
         scene_settings.pipe_speed = 0.0;
+
+        for player in &mut player_query {
+            commands.entity(player).insert((LockedAxes::new(),));
+        }
+
         next_state.set(GameState::Dead);
     }
 }
@@ -108,7 +121,10 @@ fn end_game(
             LockedAxes::new()
                 .lock_translation_x()
                 .lock_translation_z()
-                .lock_translation_y(),
+                .lock_translation_y()
+                .lock_rotation_x()
+                .lock_rotation_y()
+                .lock_rotation_z(),
             Transform::from_translation(player_settings.initial_position),
         ));
     }
