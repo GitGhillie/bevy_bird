@@ -76,12 +76,9 @@ fn start_game(
 
     for (player, mut velocity) in &mut player_query {
         commands.entity(player).insert(
-            LockedAxes::new()
+            LockedAxes::ROTATION_LOCKED
                 .lock_translation_x()
-                .lock_translation_z()
-                .lock_rotation_x()
-                .lock_rotation_y()
-                .lock_rotation_z(),
+                .lock_translation_z(),
         );
 
         // We need to jump when starting the game since the jump action is 'used up' when
@@ -126,13 +123,7 @@ fn end_game(
 ) {
     for player in &mut player_query {
         commands.entity(player).insert((
-            LockedAxes::new()
-                .lock_translation_x()
-                .lock_translation_z()
-                .lock_translation_y()
-                .lock_rotation_x()
-                .lock_rotation_y()
-                .lock_rotation_z(),
+            LockedAxes::ALL_LOCKED,
             Transform::from_translation(player_settings.initial_position),
         ));
     }
