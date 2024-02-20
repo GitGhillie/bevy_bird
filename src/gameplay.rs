@@ -52,7 +52,9 @@ impl Plugin for StateTransitionPlugin {
             )
             .add_systems(
                 Update,
-                crate::player::controls::jump.run_if(in_state(GameState::Playing)),
+                crate::player::controls::jump
+                    .run_if(in_state(GameState::Playing))
+                    .after(crate::player::controls::check_for_game_start),
             )
             .add_systems(
                 Update,
