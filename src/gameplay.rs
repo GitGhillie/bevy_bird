@@ -3,8 +3,7 @@ use crate::scene::pipes::PipePair;
 use crate::scene::{spawn_level, SceneSettings};
 use bevy::prelude::*;
 use bevy::time::common_conditions::on_timer;
-use bevy_xpbd_3d::components::{LinearVelocity, LockedAxes};
-use bevy_xpbd_3d::prelude::Collision;
+use bevy_xpbd_3d::prelude::*;
 use std::time::Duration;
 
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]

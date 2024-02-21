@@ -1,6 +1,5 @@
 use bevy::prelude::{GamepadButtonType, KeyCode, MouseButton, Reflect};
-use leafwing_input_manager::input_map::InputMap;
-use leafwing_input_manager::Actionlike;
+use leafwing_input_manager::prelude::*;
 
 // This is the list of "things in the game I want to be able to do based on input"
 #[derive(Actionlike, PartialEq, Eq, Hash, Clone, Copy, Debug, Reflect)]

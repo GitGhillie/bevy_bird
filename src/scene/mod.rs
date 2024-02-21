@@ -3,9 +3,9 @@ pub(crate) mod pipes;
 use bevy::pbr::{DirectionalLightShadowMap, NotShadowCaster};
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
-use pipes::PipePair;
-
 use bevy_turborand::prelude::*;
+
+use pipes::PipePair;
 
 pub struct ScenePlugin;
 

@@ -24,7 +24,7 @@ impl Plugin for PlayerPlugin {
                 initial_position: Vec3::new(0.0, 1.0, 0.0),
             })
             .add_systems(Startup, setup)
-            .add_systems(Update, gunshot_light);
+            .add_systems(Update, gunshot_lighting);
     }
 }
 
@@ -90,7 +90,7 @@ fn setup(
     commands.entity(parent).push_children(&[light1, light2]);
 }
 
-fn gunshot_light(
+fn gunshot_lighting(
     mut light_query: Query<&mut PointLight>,
     mut jump_event: EventReader<JumpedEvent>,
 ) {

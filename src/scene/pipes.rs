@@ -2,8 +2,7 @@ use crate::scene::{SceneAssets, SceneSettings};
 use bevy::ecs::system::Command;
 use bevy::prelude::*;
 use bevy_xpbd_3d::math::PI;
-use bevy_xpbd_3d::prelude::Collider;
-use bevy_xpbd_3d::prelude::RigidBody;
+use bevy_xpbd_3d::prelude::*;
 
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]
