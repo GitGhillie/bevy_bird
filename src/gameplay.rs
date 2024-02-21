@@ -45,7 +45,6 @@ impl Plugin for StateTransitionPlugin {
                 Update,
                 end_game
                     .run_if(in_state(GameState::Dead).and_then(on_timer(Duration::from_secs(1))))
-                    .before(crate::player::controls::check_for_game_start)
                     .after(check_for_collisions),
             )
             .add_systems(
@@ -54,14 +53,11 @@ impl Plugin for StateTransitionPlugin {
             )
             .add_systems(
                 Update,
-                crate::player::controls::jump
-                    .run_if(in_state(GameState::Playing))
-                    .after(crate::player::controls::check_for_game_start),
+                crate::player::controls::jump.run_if(in_state(GameState::Playing)),
             )
-            .add_systems(Update, ramp_up_speed.run_if(in_state(GameState::Playing)))
             .add_systems(
                 Update,
-                check_for_collisions.run_if(in_state(GameState::Playing)),
+                (check_for_collisions, ramp_up_speed).run_if(in_state(GameState::Playing)),
             )
             .add_systems(Update, scoring);
     }
