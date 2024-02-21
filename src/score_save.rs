@@ -23,7 +23,6 @@ fn load_high_score(mut score_info: ResMut<ScoreInfo>) {
         if let Ok(data) = ron::from_str(&data_buffer) {
             *score_info = data;
         }
-
     } else {
         std::fs::File::create(PATH).unwrap();
     }
