@@ -35,7 +35,7 @@ pub struct StateTransitionPlugin;
 
 impl Plugin for StateTransitionPlugin {
     fn build(&self, app: &mut App) {
-        app.add_state::<GameState>()
+        app.init_state::<GameState>()
             .insert_resource(ScoreInfo::default())
             .add_event::<ScoredEvent>()
             .add_event::<JumpedEvent>()

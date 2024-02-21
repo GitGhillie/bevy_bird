@@ -3,7 +3,6 @@ pub(crate) mod inputs;
 
 use crate::gameplay::JumpedEvent;
 use bevy::prelude::*;
-use bevy_xpbd_3d::components::{Collider, RigidBody};
 use bevy_xpbd_3d::prelude::*;
 use leafwing_input_manager::prelude::*;
 
@@ -49,7 +48,7 @@ fn setup(
                 .lock_translation_z()
                 .lock_translation_y(),
             LinearVelocity::ZERO,
-            Collider::ball(0.5),
+            Collider::sphere(0.5),
             SceneBundle {
                 scene: asset_server.load("objects/bird.glb#Scene0"),
                 transform: Transform::from_translation(player_settings.initial_position),
@@ -99,14 +98,14 @@ fn gunshot_light(
     for _ in jump_event.read() {} // Clear the queue
 
     for mut light in &mut light_query {
-        light.intensity -= 90.0;
+        light.intensity -= 50_000.0;
 
         if light.intensity < 0.0 {
             light.intensity = 0.0;
         }
 
         if gunshot_event {
-            light.intensity = 1000.0;
+            light.intensity = 1000_000.0;
         }
     }
 }

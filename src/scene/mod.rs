@@ -21,11 +21,11 @@ impl Plugin for ScenePlugin {
             })
             .insert_resource(AmbientLight {
                 color: Color::WHITE,
-                brightness: 0.25,
+                brightness: 500.0,
             })
             .insert_resource(DirectionalLightShadowMap { size: 4096 })
             .insert_resource(GlobalRng::new())
-            .add_state::<AssetState>()
+            .init_state::<AssetState>()
             .add_loading_state(
                 LoadingState::new(AssetState::Loading)
                     .continue_to_state(AssetState::Loaded)
@@ -96,7 +96,7 @@ fn setup(
 
     commands.spawn((
         PbrBundle {
-            mesh: meshes.add(Mesh::from(shape::Box::default())),
+            mesh: meshes.add(Mesh::from(Cuboid::default())),
             material: materials.add(StandardMaterial {
                 base_color: Color::hex("888888").unwrap(),
                 unlit: true,

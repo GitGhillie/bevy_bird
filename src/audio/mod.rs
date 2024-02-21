@@ -24,7 +24,7 @@ pub struct GameAudioPlugin;
 impl Plugin for GameAudioPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(AudioPlugin)
-            .add_state::<AssetState>()
+            .init_state::<AssetState>()
             .add_loading_state(
                 LoadingState::new(AssetState::Loading)
                     .continue_to_state(AssetState::Loaded)

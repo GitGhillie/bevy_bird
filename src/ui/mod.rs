@@ -23,7 +23,7 @@ fn setup(mut commands: Commands) {
                 ..default()
             },
         )
-        .with_text_alignment(TextAlignment::Center)
+        .with_text_justify(JustifyText::Center)
         .with_style(Style {
             position_type: PositionType::Absolute,
             justify_self: JustifySelf::Center,

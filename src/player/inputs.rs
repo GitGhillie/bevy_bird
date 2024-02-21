@@ -13,9 +13,9 @@ pub(crate) enum Action {
 pub(crate) fn create_input_map() -> InputMap<Action> {
     let mut input_map = InputMap::default();
 
-    input_map.insert(KeyCode::Space, Action::Jump);
-    input_map.insert(MouseButton::Left, Action::Jump);
-    input_map.insert(GamepadButtonType::South, Action::Jump);
+    input_map.insert(Action::Jump, KeyCode::Space);
+    input_map.insert(Action::Jump, MouseButton::Left);
+    input_map.insert(Action::Jump, GamepadButtonType::South);
 
     input_map
 }

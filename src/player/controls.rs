@@ -13,7 +13,7 @@ pub fn jump(
 ) {
     let (action_state, mut velocity) = query.single_mut();
 
-    if action_state.just_pressed(Action::Jump) {
+    if action_state.just_pressed(&Action::Jump) {
         velocity.y = player_settings.jump_velocity;
         jumped_event.send(JumpedEvent);
     }
@@ -25,7 +25,7 @@ pub fn check_for_game_start(
 ) {
     let action_state = query.single();
 
-    if action_state.just_pressed(Action::Jump) {
+    if action_state.just_pressed(&Action::Jump) {
         next_state.set(GameState::Playing);
     }
 }
