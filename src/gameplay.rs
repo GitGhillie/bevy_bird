@@ -5,6 +5,7 @@ use crate::scene::{spawn_level, SceneSettings};
 use bevy::prelude::*;
 use bevy::time::common_conditions::on_timer;
 use bevy_xpbd_3d::prelude::*;
+use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
@@ -15,7 +16,7 @@ pub enum GameState {
     Dead,
 }
 
-#[derive(Resource, Default)]
+#[derive(Resource, Default, Copy, Clone, Deserialize, Serialize)]
 pub struct ScoreInfo {
     pub current_score: u32,
     pub high_score: u32,

@@ -105,7 +105,7 @@ fn gunshot_lighting(
         }
 
         if gunshot_event {
-            light.intensity = 1000_000.0;
+            light.intensity = 1_000_000.0;
         }
     }
 }

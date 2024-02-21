@@ -4,6 +4,7 @@ mod audio;
 mod gameplay;
 mod player;
 mod scene;
+mod score_save;
 mod ui;
 
 use bevy::prelude::*;
@@ -28,6 +29,7 @@ fn main() {
         .add_plugins(ui::ScoreTextPlugin)
         .add_plugins(audio::GameAudioPlugin)
         .add_plugins(bevy_mod_mipmap_generator::MipmapGeneratorPlugin)
+        .add_plugins(score_save::SavePlugin)
         .add_systems(
             Update,
             bevy_mod_mipmap_generator::generate_mipmaps::<StandardMaterial>,
