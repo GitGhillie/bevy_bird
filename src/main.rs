@@ -26,7 +26,7 @@ fn main() {
         .add_plugins(player::PlayerPlugin)
         .add_plugins(scene::ScenePlugin)
         .add_plugins(gameplay::StateTransitionPlugin)
-        .add_plugins(ui::ScoreTextPlugin)
+        .add_plugins(ui::UiPlugin)
         .add_plugins(audio::GameAudioPlugin)
         .add_plugins(bevy_mod_mipmap_generator::MipmapGeneratorPlugin)
         .add_plugins(score_save::SavePlugin)
