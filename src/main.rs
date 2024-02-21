@@ -39,6 +39,8 @@ fn main() {
             .add_plugins(ScreenFrameDiagnosticsPlugin)
             .add_plugins(PhysicsDebugPlugin::default())
             .add_plugins(WorldInspectorPlugin::default());
+
+        bevy_mod_debugdump::print_schedule_graph(&mut app, Update);
     }
 
     app.run();
