@@ -1,3 +1,4 @@
+use crate::player::controls::{check_for_game_start, jump};
 use crate::player::PlayerSettings;
 use crate::scene::pipes::PipePair;
 use crate::scene::{spawn_level, SceneSettings};
@@ -42,23 +43,18 @@ impl Plugin for StateTransitionPlugin {
             .add_systems(OnEnter(GameState::Playing), start_game)
             .add_systems(
                 Update,
-                end_game
-                    .run_if(in_state(GameState::Dead).and_then(on_timer(Duration::from_secs(1))))
-                    .after(check_for_collisions),
-            )
-            .add_systems(
-                Update,
-                crate::player::controls::check_for_game_start.run_if(in_state(GameState::Ready)),
-            )
-            .add_systems(
-                Update,
-                crate::player::controls::jump.run_if(in_state(GameState::Playing)),
-            )
-            .add_systems(
-                Update,
-                (check_for_collisions, ramp_up_speed).run_if(in_state(GameState::Playing)),
-            )
-            .add_systems(Update, scoring);
+                (
+                    end_game
+                        .run_if(
+                            in_state(GameState::Dead).and_then(on_timer(Duration::from_secs(1))),
+                        )
+                        .after(check_for_collisions),
+                    check_for_game_start.run_if(in_state(GameState::Ready)),
+                    jump.run_if(in_state(GameState::Playing)),
+                    (check_for_collisions, ramp_up_speed).run_if(in_state(GameState::Playing)),
+                    scoring,
+                ),
+            );
     }
 }
 
