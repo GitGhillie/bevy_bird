@@ -36,6 +36,8 @@ fn setup(mut commands: Commands) {
         ScoreText,
     ));
 
+    // todo: Also need to disable file creation etc
+    //if !cfg!(target_arch = "wasm32") {
     commands.spawn((
         TextBundle::from_section(
             "0",
