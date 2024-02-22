@@ -141,7 +141,11 @@ fn recycle_pipes(
 
     for mut pipe_set in pipe_query.iter_mut() {
         if pipe_set.translation.x < out_of_view_bound {
-            let random_num = rng_resource.f32();
+            let random_num = if cfg!(feature = "max_difficulty") {
+                rng_resource.f32().round()
+            } else {
+                rng_resource.f32()
+            };
 
             pipe_set.translation.x = pipe_gap_x * (num_pipes - 2.0);
             pipe_set.translation.y = (random_num * scene_settings.pipe_spread) - 2.0;

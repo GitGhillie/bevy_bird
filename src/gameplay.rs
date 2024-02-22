@@ -52,7 +52,7 @@ impl Plugin for StateTransitionPlugin {
                         .after(check_for_collisions),
                     check_for_game_start.run_if(in_state(GameState::Ready)),
                     jump.run_if(in_state(GameState::Playing)),
-                    (check_for_collisions, check_for_out_of_bounds, ramp_up_speed)
+                    (ramp_up_speed, check_for_collisions, check_for_out_of_bounds)
                         .chain()
                         .run_if(in_state(GameState::Playing)),
                     scoring,
@@ -86,8 +86,15 @@ fn start_game(
 }
 
 fn ramp_up_speed(mut scene_settings: ResMut<SceneSettings>, time: Res<Time>) {
-    if scene_settings.pipe_speed < 10.0 {
-        scene_settings.pipe_speed += 0.4 * time.delta_seconds();
+    let max_pipe_speed = 8.0;
+
+    if scene_settings.pipe_speed < max_pipe_speed {
+        scene_settings.pipe_speed += 0.2 * time.delta_seconds();
+    }
+
+    #[cfg(feature = "max_difficulty")]
+    {
+        scene_settings.pipe_speed = max_pipe_speed;
     }
 }
 

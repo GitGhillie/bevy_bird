@@ -9,6 +9,7 @@ default = []
 release_web = []
 release_desktop = []
 
+max_difficulty = []
 dynamic_linking = ["bevy/dynamic_linking"]
 debugging = [
     "dep:bevy_screen_diagnostics",
