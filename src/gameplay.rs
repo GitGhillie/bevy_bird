@@ -52,7 +52,9 @@ impl Plugin for StateTransitionPlugin {
                         .after(check_for_collisions),
                     check_for_game_start.run_if(in_state(GameState::Ready)),
                     jump.run_if(in_state(GameState::Playing)),
-                    (check_for_collisions, ramp_up_speed).run_if(in_state(GameState::Playing)),
+                    (check_for_collisions, check_for_out_of_bounds, ramp_up_speed)
+                        .chain()
+                        .run_if(in_state(GameState::Playing)),
                     scoring,
                 ),
             );
@@ -107,6 +109,19 @@ fn check_for_collisions(
         }
 
         next_state.set(GameState::Dead);
+    }
+}
+
+fn check_for_out_of_bounds(
+    mut next_state: ResMut<NextState<GameState>>,
+    player_query: Query<&GlobalTransform, With<LockedAxes>>,
+    mut scene_settings: ResMut<SceneSettings>,
+) {
+    for player in &player_query {
+        if player.translation().y < -50.0 {
+            scene_settings.pipe_speed = 0.0;
+            next_state.set(GameState::Dead);
+        }
     }
 }
 
