@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
 use bevy_kira_audio::prelude::*;
 
-use crate::gameplay::{JumpedEvent, ScoredEvent};
+use crate::gameplay::{GameState, JumpedEvent, ScoredEvent};
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash, Default, States)]
 enum AssetState {
@@ -17,6 +17,8 @@ struct AudioAssets {
     coin: Handle<AudioSource>,
     #[asset(path = "audio/explosion.ogg")]
     gun: Handle<AudioSource>,
+    #[asset(path = "audio/hitHurt.ogg")]
+    death: Handle<AudioSource>,
 }
 
 pub struct GameAudioPlugin;
@@ -33,8 +35,13 @@ impl Plugin for GameAudioPlugin {
             .add_systems(
                 Update,
                 (score_audio, jump_audio).run_if(in_state(AssetState::Loaded)),
-            );
+            )
+            .add_systems(OnEnter(GameState::Dead), death_audio);
     }
+}
+
+fn death_audio(audio_assets: Res<AudioAssets>, audio: Res<Audio>) {
+    audio.play(audio_assets.death.clone_weak());
 }
 
 fn score_audio(

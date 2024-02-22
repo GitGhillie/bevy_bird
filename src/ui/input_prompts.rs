@@ -14,15 +14,15 @@ impl Plugin for PromptPlugin {
 #[derive(Component)]
 struct IconParent;
 
-fn hide(mut icon_parent: Query<&mut Visibility, With<IconParent>>) {
-    for mut icon in &mut icon_parent {
-        *icon = Visibility::Hidden;
+fn hide(mut icon_parents: Query<&mut Visibility, With<IconParent>>) {
+    for mut icon_parent in &mut icon_parents {
+        *icon_parent = Visibility::Hidden;
     }
 }
 
-fn show(mut icon_parent: Query<&mut Visibility, With<IconParent>>) {
-    for mut icon in &mut icon_parent {
-        *icon = Visibility::Visible;
+fn show(mut icon_parents: Query<&mut Visibility, With<IconParent>>) {
+    for mut icon_parent in &mut icon_parents {
+        *icon_parent = Visibility::Visible;
     }
 }
 
