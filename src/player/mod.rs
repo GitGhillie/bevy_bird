@@ -1,7 +1,7 @@
 pub(crate) mod controls;
 pub(crate) mod inputs;
 
-use crate::gameplay::JumpedEvent;
+use crate::gameplay::{GameState, JumpedEvent};
 use bevy::prelude::*;
 use bevy_xpbd_3d::prelude::*;
 use leafwing_input_manager::prelude::*;
@@ -23,7 +23,7 @@ impl Plugin for PlayerPlugin {
                 jump_velocity: 10.0,
                 initial_position: Vec3::new(0.0, 1.0, 0.0),
             })
-            .add_systems(Startup, setup)
+            .add_systems(OnEnter(GameState::Ready), setup)
             .add_systems(Update, gunshot_lighting);
     }
 }
@@ -48,7 +48,7 @@ fn setup(
                 .lock_translation_z()
                 .lock_translation_y(),
             LinearVelocity::ZERO,
-            Collider::sphere(0.5),
+            Collider::capsule(0.45, 0.3),
             SceneBundle {
                 scene: asset_server.load("objects/bird.glb#Scene0"),
                 transform: Transform::from_translation(player_settings.initial_position),

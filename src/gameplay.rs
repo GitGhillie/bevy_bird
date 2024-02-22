@@ -70,6 +70,7 @@ fn start_game(
     score_info.current_score = 0;
 
     for (player, mut velocity) in &mut player_query {
+        // Unlock the y translation
         commands.entity(player).insert(
             LockedAxes::ROTATION_LOCKED
                 .lock_translation_x()
@@ -114,13 +115,10 @@ fn end_game(
     mut next_state: ResMut<NextState<GameState>>,
     mut commands: Commands,
     pipe_query: Query<Entity, With<PipePair>>,
-    player_settings: Res<PlayerSettings>,
 ) {
     for player in &mut player_query {
-        commands.entity(player).insert((
-            LockedAxes::ALL_LOCKED,
-            Transform::from_translation(player_settings.initial_position),
-        ));
+        // Despawning the player every time is not ideal, but I had issues with resetting the rotation otherwise
+        commands.entity(player).despawn_recursive();
     }
 
     next_state.set(GameState::Ready);
