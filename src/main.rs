@@ -12,7 +12,7 @@ use bevy_xpbd_3d::prelude::*;
 
 #[cfg(feature = "debugging")]
 use {
-    //bevy_inspector_egui::quick::WorldInspectorPlugin,
+    bevy_inspector_egui::quick::WorldInspectorPlugin,
     bevy_screen_diagnostics::{ScreenDiagnosticsPlugin, ScreenFrameDiagnosticsPlugin},
 };
 
@@ -39,8 +39,8 @@ fn main() {
     {
         app.add_plugins(ScreenDiagnosticsPlugin::default())
             .add_plugins(ScreenFrameDiagnosticsPlugin)
-            .add_plugins(PhysicsDebugPlugin::default());
-        //.add_plugins(WorldInspectorPlugin::default());
+            .add_plugins(PhysicsDebugPlugin::default())
+            .add_plugins(WorldInspectorPlugin::default());
 
         //bevy_mod_debugdump::print_schedule_graph(&mut app, Update);
     }
