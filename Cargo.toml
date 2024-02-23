@@ -33,10 +33,10 @@ opt-level = 3
 
 [profile.release]
 opt-level = 'z' # For size
-#panic = 'abort'
-#debug = 0
+panic = 'abort'
+debug = 0
 codegen-units = 1
-#strip = true
+strip = true
 lto = true
 
 [dependencies]
