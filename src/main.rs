@@ -21,7 +21,13 @@ fn main() {
 
     app
         //.insert_resource(AssetMetaCheck::Never) // I think this is needed for a web release
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            primary_window: Some(Window {
+                canvas: Some("#game-canvas".into()),
+                ..default()
+            }),
+            ..default()
+        }))
         .add_plugins(PhysicsPlugins::default())
         .add_plugins(player::PlayerPlugin)
         .add_plugins(scene::ScenePlugin)
