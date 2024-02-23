@@ -7,6 +7,7 @@ mod scene;
 mod score_save;
 mod ui;
 
+use bevy::asset::AssetMetaCheck;
 use bevy::prelude::*;
 use bevy_xpbd_3d::prelude::*;
 
@@ -19,8 +20,7 @@ use {
 fn main() {
     let mut app = App::new();
 
-    app
-        //.insert_resource(AssetMetaCheck::Never) // I think this is needed for a web release
+    app.insert_resource(AssetMetaCheck::Never) // Needed to prevent errors in web release
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 canvas: Some("#game-canvas".into()),
