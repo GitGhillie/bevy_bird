@@ -5,21 +5,27 @@
 .content {
   max-width: 1280px;
   margin: auto;
+  color: black;
 }
 </style>
 
-<body style="margin: 0px;">
+<body style="margin: 0px; background-color: slategray;">
 
 	<div class="content">
-	  <h1>Bevy Bird 3D</h1>
+	  <h1>Flappy <s>Bird</s> Gun</h1>
 
-
-	  
 	  <canvas id="game-canvas" width="1280" height="720"></canvas>
+	  
+	  <h2>About</h2>
+	  A simple Flappy Bird clone made with the <a href="https://bevyengine.org/">Bevy Engine</a>.<br>
+	  The source code can be found <a href="https://github.com/GitGhillie/bevy_bird">here</a>.<br>
+	  
+	  <h3>Credits</h3>
+	  Depends on <a href="https://github.com/GitGhillie/bevy_bird/blob/main/Cargo.toml#L42">these</a> Rust crates.<br>
+	  Gun model from <a href="https://skfb.ly/6SIFQ">The National Museum in Kraków</a>.<br>
+	  Sounds generated with <a href="https://sfxr.me/">Jsfxr</a>.<br>
+	  Icons from <a href="https://mrbreakfastsdelight.itch.io/mr-breakfasts-free-prompts">Mr. Breakfast's Free Prompts</a>.<br>
 	</div>
-
-
-
 
   <script type="module">
     import './restart-audio-context.js'
