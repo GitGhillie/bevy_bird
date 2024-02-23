@@ -64,8 +64,6 @@ fn setup(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    // todo: Disable physics while assets are loading
-
     commands.spawn((
         Camera3dBundle {
             transform: Transform::from_xyz(-2.5, 4.5, 9.0)

@@ -2,7 +2,7 @@ use crate::gameplay::{GameState, ScoreInfo};
 use bevy::prelude::*;
 use std::io::{Read, Write};
 
-const PATH: &str = "./file.ron";
+const PATH: &str = "./score.ron";
 
 pub struct SavePlugin;
 

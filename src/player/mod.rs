@@ -87,7 +87,6 @@ fn setup(
                 mesh: meshes.add(Sphere::default().mesh().uv(16, 8)),
                 material: smoke_material_handle.clone(),
                 transform: Transform::from_xyz(0.05, -0.81, 0.0),
-                //visibility: Visibility::Hidden,
                 ..default()
             },
             NotShadowCaster,
