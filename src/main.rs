@@ -27,13 +27,13 @@ fn main() {
         .add_plugins(scene::ScenePlugin)
         .add_plugins(gameplay::StateTransitionPlugin)
         .add_plugins(ui::UiPlugin)
-        .add_plugins(audio::GameAudioPlugin)
-        .add_plugins(score_save::SavePlugin);
+        .add_plugins(audio::GameAudioPlugin);
 
     // Since 0.12 mipmaps can be automatically generated but this did not work for me. TBD
     #[cfg(feature = "desktop")]
     {
-        app.add_plugins(bevy_mod_mipmap_generator::MipmapGeneratorPlugin)
+        app.add_plugins(score_save::SavePlugin)
+            .add_plugins(bevy_mod_mipmap_generator::MipmapGeneratorPlugin)
             .add_systems(
                 Update,
                 bevy_mod_mipmap_generator::generate_mipmaps::<StandardMaterial>,
