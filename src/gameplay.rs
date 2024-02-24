@@ -137,9 +137,12 @@ fn check_for_out_of_bounds(
 // Quick hack to make sure the initial rotation is correct when starting the game
 // Without it the physics engine will sometimes apply a rotation the first frame
 // after respawning.
-fn force_no_rotation(mut player_query: Query<(&mut Rotation), With<LockedAxes>>) {
+fn force_no_rotation(
+    mut player_query: Query<&mut Rotation, With<LockedAxes>>,
+    player_settings: Res<PlayerSettings>,
+) {
     for mut player_rotation in &mut player_query {
-        **player_rotation = Quaternion::default();
+        **player_rotation = Quaternion::from_rotation_z(player_settings.initial_rotation);
     }
 }
 

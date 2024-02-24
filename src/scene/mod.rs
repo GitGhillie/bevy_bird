@@ -4,6 +4,7 @@ use bevy::pbr::{DirectionalLightShadowMap, NotShadowCaster};
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
 use bevy_turborand::prelude::*;
+use bevy_xpbd_3d::math::PI;
 
 use pipes::PipePair;
 
@@ -112,7 +113,7 @@ pub fn spawn_level(mut commands: Commands, scene_settings: Res<SceneSettings>) {
     for i in 0..5 {
         commands.add(pipes::SpawnPipePair {
             position_x: (i + 1) as f32 * scene_settings.pipe_gap_x,
-            rotation: i as f32 * 90.0,
+            rotation: i as f32 * PI * 0.5,
         });
     }
 }

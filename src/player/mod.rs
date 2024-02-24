@@ -1,7 +1,7 @@
 pub(crate) mod controls;
 pub(crate) mod inputs;
 
-use crate::gameplay::{GameState, JumpedEvent};
+use crate::gameplay::JumpedEvent;
 use bevy::pbr::NotShadowCaster;
 use bevy::prelude::*;
 use bevy_xpbd_3d::prelude::*;
@@ -11,6 +11,7 @@ use leafwing_input_manager::prelude::*;
 #[reflect(Resource)]
 pub struct PlayerSettings {
     pub initial_position: Vec3,
+    pub initial_rotation: f32,
     pub jump_velocity: f32,
 }
 
@@ -26,6 +27,7 @@ impl Plugin for PlayerPlugin {
             .insert_resource(PlayerSettings {
                 jump_velocity: 10.0,
                 initial_position: Vec3::new(0.0, 1.0, 0.0),
+                initial_rotation: -0.28,
             })
             .insert_resource(SmokeMaterialHandle(Handle::default()))
             .add_systems(Startup, setup)
@@ -60,7 +62,7 @@ fn setup(
                 .lock_translation_z()
                 .lock_translation_y(),
             LinearVelocity::ZERO,
-            Collider::capsule(0.45, 0.3),
+            Collider::capsule(0.7, 0.2),
             SceneBundle {
                 scene: asset_server.load("objects/bird.glb#Scene0"),
                 transform: Transform::from_translation(player_settings.initial_position),

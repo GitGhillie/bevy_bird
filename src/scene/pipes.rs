@@ -54,7 +54,7 @@ impl Command for SpawnPipePair {
                     );
 
                     let collider_components = (
-                        Collider::cuboid(2.0, collider_length, 2.0),
+                        Collider::cuboid(1.9, collider_length, 1.9),
                         Transform::from_xyz(0.0, -collider_length / 2.0, 0.0),
                     );
 
