@@ -1,6 +1,6 @@
 pub(crate) mod pipes;
 
-use bevy::pbr::{DirectionalLightShadowMap, NotShadowCaster};
+use bevy::pbr::{CascadeShadowConfigBuilder, DirectionalLightShadowMap, NotShadowCaster};
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
 use bevy_turborand::prelude::*;
@@ -83,6 +83,11 @@ fn setup(
         },
     ));
 
+    let shadow_config = CascadeShadowConfigBuilder {
+        maximum_distance: 20.0,
+        ..default()
+    };
+
     commands.spawn(DirectionalLightBundle {
         transform: Transform::from_xyz(0.0, 1.0, 0.0)
             .looking_at(Vec3::new(-0.25, 0.0, -0.05), Vec3::Z),
@@ -90,6 +95,7 @@ fn setup(
             shadows_enabled: true,
             ..default()
         },
+        cascade_shadow_config: shadow_config.build(),
         ..default()
     });
 
