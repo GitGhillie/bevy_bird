@@ -147,7 +147,7 @@ fn recycle_pipes(
             };
 
             pipe_set.translation.x = pipe_gap_x * (num_pipes - 2.0);
-            pipe_set.translation.y = (random_num * scene_settings.pipe_spread) - 2.0;
+            pipe_set.translation.y = (random_num * scene_settings.pipe_spread) - 2.5;
         }
     }
 }
