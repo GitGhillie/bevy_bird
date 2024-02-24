@@ -28,7 +28,7 @@ impl Plugin for PlayerPlugin {
                 initial_position: Vec3::new(0.0, 1.0, 0.0),
             })
             .insert_resource(SmokeMaterialHandle(Handle::default()))
-            .add_systems(OnEnter(GameState::Ready), setup)
+            .add_systems(Startup, setup)
             .add_systems(Update, (gunshot_lighting, smoke_control));
     }
 }

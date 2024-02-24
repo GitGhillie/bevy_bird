@@ -5,6 +5,7 @@ use crate::scene::{spawn_level, SceneSettings};
 
 use bevy::prelude::*;
 use bevy::time::common_conditions::on_timer;
+use bevy_xpbd_3d::math::Quaternion;
 use bevy_xpbd_3d::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
@@ -51,7 +52,7 @@ impl Plugin for StateTransitionPlugin {
                             in_state(GameState::Dead).and_then(on_timer(Duration::from_secs(1))),
                         )
                         .after(check_for_collisions),
-                    check_for_game_start.run_if(in_state(GameState::Ready)),
+                    (check_for_game_start, force_no_rotation).run_if(in_state(GameState::Ready)),
                     jump.run_if(in_state(GameState::Playing)),
                     (ramp_up_speed, check_for_collisions, check_for_out_of_bounds)
                         .chain()
@@ -133,15 +134,33 @@ fn check_for_out_of_bounds(
     }
 }
 
+// Quick hack to make sure the initial rotation is correct when starting the game
+// Without it the physics engine will sometimes apply a rotation the first frame
+// after respawning.
+fn force_no_rotation(mut player_query: Query<(&mut Rotation), With<LockedAxes>>) {
+    for mut player_rotation in &mut player_query {
+        **player_rotation = Quaternion::default();
+    }
+}
+
 fn end_game(
+    mut commands: Commands,
     mut player_query: Query<Entity, With<LockedAxes>>,
     mut next_state: ResMut<NextState<GameState>>,
-    mut commands: Commands,
     pipe_query: Query<Entity, With<PipePair>>,
+    player_settings: Res<PlayerSettings>,
 ) {
+    // todo: Factor out into something like a player-reset bundle
     for player in &mut player_query {
-        // Despawning the player every time is not ideal, but I had issues with resetting the rotation otherwise
-        commands.entity(player).despawn_recursive();
+        commands.entity(player).insert((
+            LockedAxes::new()
+                .lock_translation_x()
+                .lock_translation_z()
+                .lock_translation_y(),
+            LinearVelocity::ZERO,
+            AngularVelocity::ZERO,
+            Transform::from_translation(player_settings.initial_position),
+        ));
     }
 
     next_state.set(GameState::Ready);
