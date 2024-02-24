@@ -127,7 +127,7 @@ fn check_for_out_of_bounds(
     mut scene_settings: ResMut<SceneSettings>,
 ) {
     for player in &player_query {
-        if player.translation().y < -50.0 {
+        if player.translation().y < -20.0 {
             scene_settings.pipe_speed = 0.0;
             next_state.set(GameState::Dead);
         }
