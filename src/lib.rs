@@ -9,6 +9,7 @@ mod ui;
 
 use bevy::asset::AssetMetaCheck;
 use bevy::prelude::*;
+use bevy::window::WindowMode;
 use bevy_xpbd_3d::prelude::*;
 
 #[cfg(feature = "debugging")]
@@ -17,12 +18,15 @@ use {
     bevy_screen_diagnostics::{ScreenDiagnosticsPlugin, ScreenFrameDiagnosticsPlugin},
 };
 
+#[bevy_main]
 fn main() {
     let mut app = App::new();
 
     app.insert_resource(AssetMetaCheck::Never) // Needed to prevent errors in web release
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
+                resizable: false,
+                mode: WindowMode::BorderlessFullscreen,
                 canvas: Some("#game-canvas".into()),
                 ..default()
             }),

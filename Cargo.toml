@@ -4,6 +4,26 @@ version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 
+[lib]
+name = "bevy_bird"
+crate-type = ["staticlib", "cdylib"]
+
+[package.metadata.android]
+package = "my.flappybird.clone"
+apk_name = "bevybird"
+assets = "./assets"
+resources = "./assets/android-res"
+# This strips debug symbols from the shared libraries, drastically reducing APK size. If you need them, remove the option.
+strip = "strip"
+build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]
+
+[package.metadata.android.sdk]
+target_sdk_version = 31
+
+[package.metadata.android.application]
+icon = "@mipmap/ic_launcher"
+label = "Bevy Bird"
+
 [features]
 default = []
 web = []
