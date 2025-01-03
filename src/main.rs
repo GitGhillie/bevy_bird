@@ -20,20 +20,26 @@ use {
 fn main() {
     let mut app = App::new();
 
-    app.insert_resource(AssetMetaCheck::Never) // Needed to prevent errors in web release
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
-                canvas: Some("#game-canvas".into()),
+    app.add_plugins(
+        DefaultPlugins
+            .set(WindowPlugin {
+                primary_window: Some(Window {
+                    canvas: Some("#game-canvas".into()),
+                    ..default()
+                }),
+                ..default()
+            })
+            .set(AssetPlugin {
+                meta_check: AssetMetaCheck::Never, // Needed to prevent errors in web release
                 ..default()
             }),
-            ..default()
-        }))
-        .add_plugins(PhysicsPlugins::default())
-        .add_plugins(player::PlayerPlugin)
-        .add_plugins(scene::ScenePlugin)
-        .add_plugins(gameplay::StateTransitionPlugin)
-        .add_plugins(ui::UiPlugin)
-        .add_plugins(audio::GameAudioPlugin);
+    )
+    .add_plugins(PhysicsPlugins::default())
+    .add_plugins(player::PlayerPlugin)
+    .add_plugins(scene::ScenePlugin)
+    .add_plugins(gameplay::StateTransitionPlugin)
+    .add_plugins(ui::UiPlugin)
+    .add_plugins(audio::GameAudioPlugin);
 
     // Since 0.12 mipmaps can be automatically generated but this did not work for me. TBD
     #[cfg(feature = "desktop")]

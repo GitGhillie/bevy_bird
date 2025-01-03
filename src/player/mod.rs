@@ -7,6 +7,8 @@ use bevy::prelude::*;
 use bevy_xpbd_3d::prelude::*;
 use leafwing_input_manager::prelude::*;
 
+use bevy::color::palettes::css::ORANGE;
+
 #[derive(Reflect, Resource, Default)]
 #[reflect(Resource)]
 pub struct PlayerSettings {
@@ -77,7 +79,7 @@ fn setup(
 
     let smoke_material = StandardMaterial {
         alpha_mode: AlphaMode::Blend,
-        base_color: Color::rgba(1.0, 1.0, 1.0, 0.0),
+        base_color: Color::srgba(1.0, 1.0, 1.0, 0.0),
         ..default()
     };
 
@@ -100,7 +102,7 @@ fn setup(
         .spawn(PointLightBundle {
             point_light: PointLight {
                 intensity: 0.0,
-                color: Color::ORANGE,
+                color: ORANGE.into(),
                 shadows_enabled: true,
                 ..default()
             },
@@ -113,7 +115,7 @@ fn setup(
         .spawn(PointLightBundle {
             point_light: PointLight {
                 intensity: 0.0,
-                color: Color::ORANGE,
+                color: ORANGE.into(),
                 shadows_enabled: true,
                 ..default()
             },
@@ -144,8 +146,8 @@ fn smoke_control(
         *scale = 0.0;
     }
 
-    if let Some(material) = materials.get_mut(smoke_material_handle.clone()) {
-        material.base_color = Color::rgba(1.0, 1.0, 1.0, *alpha);
+    if let Some(material) = materials.get_mut(smoke_material_handle.id()) {
+        material.base_color = Color::srgba(1.0, 1.0, 1.0, *alpha);
     }
 
     for mut transform in &mut smoke_query {

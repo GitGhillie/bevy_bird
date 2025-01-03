@@ -1,6 +1,8 @@
 use crate::gameplay::{GameState, ScoreInfo, ScoredEvent};
 use bevy::prelude::*;
 
+use bevy::color::palettes::css::GOLD;
+
 pub struct ScoreTextPlugin;
 
 impl Plugin for ScoreTextPlugin {
@@ -23,7 +25,7 @@ fn setup(mut commands: Commands) {
             "0",
             TextStyle {
                 font_size: 100.0,
-                color: Color::GOLD,
+                color: GOLD.into(),
                 ..default()
             },
         )
