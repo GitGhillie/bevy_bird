@@ -62,8 +62,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             parent.spawn((
                 NodeBundle {
                     style: icon_style.clone(),
-                    // a `NodeBundle` is transparent by default, so to see the image we have to its color to `WHITE`
-                    background_color: Color::WHITE.into(),
                     ..default()
                 },
                 UiImage::new(asset_server.load("textures/prompts/left_mouse_button_light.png")),
@@ -72,7 +70,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             parent.spawn((
                 NodeBundle {
                     style: icon_style.clone(),
-                    background_color: Color::WHITE.into(),
                     ..default()
                 },
                 UiImage::new(asset_server.load("textures/prompts/xbox_a_green.png")),
@@ -81,7 +78,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             parent.spawn((
                 NodeBundle {
                     style: icon_style_space.clone(),
-                    background_color: Color::WHITE.into(),
                     ..default()
                 },
                 UiImage::new(asset_server.load("textures/prompts/space_light.png")),

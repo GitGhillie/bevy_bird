@@ -71,7 +71,7 @@ features = [
     "bevy_render",
     "bevy_text",
     "bevy_ui",
-    "multi-threaded",
+    "multi_threaded",
     "png",
     "jpeg",
     "hdr",

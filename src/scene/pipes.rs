@@ -1,5 +1,5 @@
 use crate::scene::{SceneAssets, SceneSettings};
-use bevy::ecs::system::Command;
+use bevy::ecs::world::Command;
 use bevy::prelude::*;
 use bevy_xpbd_3d::math::PI;
 use bevy_xpbd_3d::prelude::*;
