@@ -64,7 +64,7 @@ fn setup(
                 .lock_translation_z()
                 .lock_translation_y(),
             LinearVelocity::ZERO,
-            Collider::capsule(0.7, 0.2),
+            Collider::capsule(0.2, 0.7),
             SceneRoot(asset_server.load("objects/bird.glb#Scene0")),
             Transform::from_translation(player_settings.initial_position),
             InputManagerBundle::<inputs::Action> {
