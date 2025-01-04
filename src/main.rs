@@ -7,15 +7,12 @@ mod scene;
 mod score_save;
 mod ui;
 
+use avian3d::prelude::*;
 use bevy::asset::AssetMetaCheck;
 use bevy::prelude::*;
-use bevy_xpbd_3d::prelude::*;
 
 #[cfg(feature = "debugging")]
-use {
-    bevy_inspector_egui::quick::WorldInspectorPlugin,
-    bevy_screen_diagnostics::{ScreenDiagnosticsPlugin, ScreenFrameDiagnosticsPlugin},
-};
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
 fn main() {
     let mut app = App::new();
@@ -41,22 +38,15 @@ fn main() {
     .add_plugins(ui::UiPlugin)
     .add_plugins(audio::GameAudioPlugin);
 
-    // Since 0.12 mipmaps can be automatically generated but this did not work for me. TBD
+    // todo mipmaps
     #[cfg(feature = "desktop")]
     {
-        app.add_plugins(score_save::SavePlugin)
-            .add_plugins(bevy_mod_mipmap_generator::MipmapGeneratorPlugin)
-            .add_systems(
-                Update,
-                bevy_mod_mipmap_generator::generate_mipmaps::<StandardMaterial>,
-            );
+        app.add_plugins(score_save::SavePlugin);
     }
 
     #[cfg(feature = "debugging")]
     {
-        app.add_plugins(ScreenDiagnosticsPlugin::default())
-            .add_plugins(ScreenFrameDiagnosticsPlugin)
-            .add_plugins(PhysicsDebugPlugin::default())
+        app.add_plugins(PhysicsDebugPlugin::default())
             .add_plugins(WorldInspectorPlugin::default());
 
         //bevy_mod_debugdump::print_schedule_graph(&mut app, Update);

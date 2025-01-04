@@ -30,14 +30,14 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let mut icon_margin = UiRect::all(Val::Px(5.));
     icon_margin.top = Val::VMin(90.);
 
-    let icon_style = Style {
+    let icon_node = Node {
         width: Val::Px(30.0),
         height: Val::Px(30.0),
         margin: icon_margin,
         ..default()
     };
 
-    let icon_style_space = Style {
+    let icon_node_space = Node {
         width: Val::Px(90.0),
         height: Val::Px(30.0),
         margin: icon_margin,
@@ -46,41 +46,29 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 
     commands
         .spawn((
-            NodeBundle {
-                style: Style {
-                    width: Val::Percent(100.0),
-                    position_type: PositionType::Absolute,
-                    justify_content: JustifyContent::Center,
-                    align_items: AlignItems::FlexStart,
-                    ..default()
-                },
+            Node {
+                width: Val::Percent(100.0),
+                position_type: PositionType::Absolute,
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::FlexStart,
                 ..default()
             },
             IconParent,
         ))
         .with_children(|parent| {
             parent.spawn((
-                NodeBundle {
-                    style: icon_style.clone(),
-                    ..default()
-                },
-                UiImage::new(asset_server.load("textures/prompts/left_mouse_button_light.png")),
+                icon_node.clone(),
+                ImageNode::new(asset_server.load("textures/prompts/left_mouse_button_light.png")),
             ));
 
             parent.spawn((
-                NodeBundle {
-                    style: icon_style.clone(),
-                    ..default()
-                },
-                UiImage::new(asset_server.load("textures/prompts/xbox_a_green.png")),
+                icon_node.clone(),
+                ImageNode::new(asset_server.load("textures/prompts/xbox_a_green.png")),
             ));
 
             parent.spawn((
-                NodeBundle {
-                    style: icon_style_space.clone(),
-                    ..default()
-                },
-                UiImage::new(asset_server.load("textures/prompts/space_light.png")),
+                icon_node_space.clone(),
+                ImageNode::new(asset_server.load("textures/prompts/space_light.png")),
             ));
         });
 }

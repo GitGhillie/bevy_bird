@@ -7,15 +7,14 @@ license = "MIT OR Apache-2.0"
 [features]
 default = []
 web = []
-desktop = ["dep:bevy_mod_mipmap_generator"]
+desktop = []
 
 max_difficulty = []
 dynamic_linking = ["bevy/dynamic_linking"]
 debugging = [
-    "dep:bevy_screen_diagnostics",
     "dep:bevy_mod_debugdump",
     "dep:bevy-inspector-egui",
-    "bevy_xpbd_3d/debug-plugin"
+    "avian3d/debug-plugin"
 ]
 
 # todo: Check https://github.com/tbillington/bevy_best_practices build settings for release
@@ -40,17 +39,15 @@ strip = true
 lto = true
 
 [dependencies]
-bevy_xpbd_3d = { version = "0.5" }
-leafwing-input-manager = "0.15"
-bevy_asset_loader = "0.21"
-bevy_kira_audio = "0.20"
-bevy_turborand = "0.9"
-bevy_mod_mipmap_generator = { git = "https://github.com/DGriffin91/bevy_mod_mipmap_generator.git", rev = "a24515f", optional = true}
+avian3d  = { version = "0.2" }
+leafwing-input-manager = "0.16"
+bevy_asset_loader = "0.22"
+bevy_kira_audio = "0.21"
+bevy_turborand = "0.10"
 ron = "0.8"
 serde = { version = "1", features = ["derive"] }
-bevy_mod_debugdump = { version = "0.11", optional = true }
-bevy-inspector-egui = { version = "0.27", optional = true }
-bevy_screen_diagnostics = { version = "0.6", optional = true }
+bevy_mod_debugdump = { version = "0.12", optional = true }
+bevy-inspector-egui = { version = "0.28", optional = true }
 
 # Workaround for https://github.com/Bluefinger/bevy_turborand/issues/15
 [target.'cfg(target_arch = "wasm32")'.dependencies]
@@ -58,7 +55,7 @@ instant = { version = "0.1", features = ["wasm-bindgen"] }
 
 # todo: check if there are any more features that can be disabled (per platform as well?)
 [dependencies.bevy]
-version = "0.14"
+version = "0.15.1"
 default-features = false
 features = [
     "bevy_asset",

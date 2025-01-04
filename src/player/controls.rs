@@ -1,5 +1,5 @@
+use avian3d::prelude::*;
 use bevy::prelude::*;
-use bevy_xpbd_3d::prelude::*;
 use leafwing_input_manager::prelude::*;
 
 use crate::gameplay::{GameState, JumpedEvent};

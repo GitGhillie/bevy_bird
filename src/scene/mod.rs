@@ -1,10 +1,10 @@
 pub(crate) mod pipes;
 
+use avian3d::math::PI;
 use bevy::pbr::{CascadeShadowConfigBuilder, DirectionalLightShadowMap, NotShadowCaster};
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
 use bevy_turborand::prelude::*;
-use bevy_xpbd_3d::math::PI;
 
 use pipes::PipePair;
 
@@ -66,12 +66,9 @@ fn setup(
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     commands.spawn((
-        Camera3dBundle {
-            transform: Transform::from_xyz(-2.5, 4.5, 9.0)
-                .looking_at(Vec3::new(0.0, 1.0, 0.0), Vec3::Y),
-            ..default()
-        },
-        FogSettings {
+        Camera3d::default(),
+        Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::new(0.0, 1.0, 0.0), Vec3::Y),
+        DistanceFog {
             color: Color::srgba(0.35, 0.48, 0.66, 1.0),
             directional_light_color: Color::srgba(1.0, 0.95, 0.85, 0.5),
             directional_light_exponent: 30.0,
@@ -86,38 +83,34 @@ fn setup(
     let shadow_config = CascadeShadowConfigBuilder {
         maximum_distance: 20.0,
         ..default()
-    };
+    }
+    .build();
 
-    commands.spawn(DirectionalLightBundle {
-        transform: Transform::from_xyz(0.0, 1.0, 0.0)
-            .looking_at(Vec3::new(-0.25, 0.0, -0.05), Vec3::Z),
-        directional_light: DirectionalLight {
+    commands.spawn((
+        DirectionalLight {
             shadows_enabled: true,
             ..default()
         },
-        cascade_shadow_config: shadow_config.build(),
-        ..default()
-    });
+        Transform::from_xyz(0.0, 1.0, 0.0).looking_at(Vec3::new(-0.25, 0.0, -0.05), Vec3::Z),
+        shadow_config,
+    ));
 
     commands.spawn((
-        PbrBundle {
-            mesh: meshes.add(Mesh::from(Cuboid::default())),
-            material: materials.add(StandardMaterial {
-                base_color: Srgba::hex("888888").unwrap().into(),
-                unlit: true,
-                cull_mode: None,
-                ..default()
-            }),
-            transform: Transform::from_scale(Vec3::splat(100.0)),
+        Mesh3d(meshes.add(Mesh::from(Cuboid::default()))),
+        MeshMaterial3d(materials.add(StandardMaterial {
+            base_color: Srgba::hex("888888").unwrap().into(),
+            unlit: true,
+            cull_mode: None,
             ..default()
-        },
+        })),
+        Transform::from_scale(Vec3::splat(100.0)),
         NotShadowCaster,
     ));
 }
 
 pub fn spawn_level(mut commands: Commands, scene_settings: Res<SceneSettings>) {
     for i in 0..5 {
-        commands.add(pipes::SpawnPipePair {
+        commands.queue(pipes::SpawnPipePair {
             position_x: (i + 1) as f32 * scene_settings.pipe_gap_x,
             rotation: i as f32 * PI * 0.5,
         });
@@ -130,7 +123,7 @@ fn move_pipes(
     scene_settings: Res<SceneSettings>,
 ) {
     for mut pipe_set in pipe_query.iter_mut() {
-        pipe_set.translation.x -= scene_settings.pipe_speed * time.delta_seconds();
+        pipe_set.translation.x -= scene_settings.pipe_speed * time.delta_secs();
     }
 }
 

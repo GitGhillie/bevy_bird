@@ -1,8 +1,8 @@
 use crate::scene::{SceneAssets, SceneSettings};
+use avian3d::math::PI;
+use avian3d::prelude::*;
 use bevy::ecs::world::Command;
 use bevy::prelude::*;
-use bevy_xpbd_3d::math::PI;
-use bevy_xpbd_3d::prelude::*;
 
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]
@@ -33,11 +33,8 @@ impl Command for SpawnPipePair {
             let parent_components = (
                 Name::from("PipePair"),
                 PipePair,
-                VisibilityBundle::default(),
-                TransformBundle {
-                    local: parent_transform,
-                    ..default()
-                },
+                Visibility::default(),
+                parent_transform,
             );
 
             world.spawn(parent_components).with_children(|parent| {
@@ -46,11 +43,8 @@ impl Command for SpawnPipePair {
                     let pipe_components = (
                         Name::from("Pipe"),
                         RigidBody::Kinematic,
-                        SceneBundle {
-                            scene: pipe_handle.clone_weak(),
-                            transform,
-                            ..default()
-                        },
+                        SceneRoot(pipe_handle.clone_weak()),
+                        transform,
                     );
 
                     let collider_components = (

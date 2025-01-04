@@ -21,61 +21,53 @@ struct HighScoreText;
 
 fn setup(mut commands: Commands) {
     commands.spawn((
-        TextBundle::from_section(
-            "0",
-            TextStyle {
-                font_size: 100.0,
-                color: GOLD.into(),
-                ..default()
-            },
-        )
-        .with_text_justify(JustifyText::Center)
-        .with_style(Style {
+        Text::new("0"),
+        TextFont::from_font_size(100.0),
+        TextColor(GOLD.into()),
+        TextLayout::new_with_justify(JustifyText::Center),
+        Node {
             position_type: PositionType::Absolute,
             justify_self: JustifySelf::Center,
             ..default()
-        }),
+        },
         ScoreText,
     ));
 
     // todo: Also need to disable file creation etc
     //if !cfg!(target_arch = "wasm32") {
     commands.spawn((
-        TextBundle::from_section(
-            "0",
-            TextStyle {
-                font_size: 50.0,
-                color: Color::WHITE,
-                ..default()
-            },
-        )
-        .with_text_justify(JustifyText::Right)
-        .with_style(Style {
+        Text::new("0"),
+        TextFont::from_font_size(75.0),
+        TextColor::WHITE,
+        TextLayout::new_with_justify(JustifyText::Right),
+        Node {
             position_type: PositionType::Absolute,
             justify_self: JustifySelf::End,
             ..default()
-        }),
+        },
         HighScoreText,
     ));
 }
 
 fn update_score(
-    mut score_query: Query<&mut Text, With<ScoreText>>,
+    score_query: Query<Entity, With<ScoreText>>,
     mut scored_event: EventReader<ScoredEvent>,
     score_info: Res<ScoreInfo>,
+    mut writer: TextUiWriter,
 ) {
     for _ in scored_event.read() {
-        for mut text in &mut score_query {
-            text.sections[0].value = format!("{num}", num = score_info.current_score);
+        for text_ent in &score_query {
+            *writer.text(text_ent, 0) = format!("{num}", num = score_info.current_score);
         }
     }
 }
 
 fn update_high_score(
-    mut high_score_query: Query<&mut Text, With<HighScoreText>>,
+    high_score_query: Query<Entity, With<HighScoreText>>,
     score_info: Res<ScoreInfo>,
+    mut writer: TextUiWriter,
 ) {
-    for mut text in &mut high_score_query {
-        text.sections[0].value = format!("{num} ", num = score_info.high_score);
+    for text_ent in &high_score_query {
+        *writer.text(text_ent, 0) = format!("{num} ", num = score_info.high_score);
     }
 }
