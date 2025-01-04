@@ -3,10 +3,10 @@ use crate::player::PlayerSettings;
 use crate::scene::pipes::PipePair;
 use crate::scene::{spawn_level, SceneSettings};
 
+use avian3d::math::Quaternion;
+use avian3d::prelude::*;
 use bevy::prelude::*;
 use bevy::time::common_conditions::on_timer;
-use bevy_xpbd_3d::math::Quaternion;
-use bevy_xpbd_3d::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
@@ -91,7 +91,7 @@ fn ramp_up_speed(mut scene_settings: ResMut<SceneSettings>, time: Res<Time>) {
     let max_pipe_speed = 8.0;
 
     if scene_settings.pipe_speed < max_pipe_speed {
-        scene_settings.pipe_speed += 0.2 * time.delta_seconds();
+        scene_settings.pipe_speed += 0.2 * time.delta_secs();
     }
 
     #[cfg(feature = "max_difficulty")]

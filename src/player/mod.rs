@@ -2,9 +2,9 @@ pub(crate) mod controls;
 pub(crate) mod inputs;
 
 use crate::gameplay::JumpedEvent;
+use avian3d::prelude::*;
 use bevy::pbr::NotShadowCaster;
 use bevy::prelude::*;
-use bevy_xpbd_3d::prelude::*;
 use leafwing_input_manager::prelude::*;
 
 use bevy::color::palettes::css::ORANGE;
@@ -65,11 +65,8 @@ fn setup(
                 .lock_translation_y(),
             LinearVelocity::ZERO,
             Collider::capsule(0.7, 0.2),
-            SceneBundle {
-                scene: asset_server.load("objects/bird.glb#Scene0"),
-                transform: Transform::from_translation(player_settings.initial_position),
-                ..default()
-            },
+            SceneRoot(asset_server.load("objects/bird.glb#Scene0")),
+            Transform::from_translation(player_settings.initial_position),
             InputManagerBundle::<inputs::Action> {
                 input_map: inputs::create_input_map(),
                 ..default()
@@ -87,12 +84,9 @@ fn setup(
 
     let smoke = commands
         .spawn((
-            PbrBundle {
-                mesh: meshes.add(Sphere::default().mesh().uv(16, 8)),
-                material: smoke_material_handle.clone(),
-                transform: Transform::from_xyz(0.05, -0.81, 0.0),
-                ..default()
-            },
+            Mesh3d(meshes.add(Sphere::default().mesh().uv(16, 8))),
+            MeshMaterial3d(smoke_material_handle.clone()),
+            Transform::from_xyz(0.05, -0.81, 0.0),
             NotShadowCaster,
             Smoke,
         ))
@@ -126,7 +120,7 @@ fn setup(
 
     commands
         .entity(parent)
-        .push_children(&[light1, light2, smoke]);
+        .add_children(&[light1, light2, smoke]);
 }
 
 fn smoke_control(
@@ -155,8 +149,8 @@ fn smoke_control(
     }
 
     if *alpha > 0.0 {
-        *alpha -= 5.0 * time.delta_seconds();
-        *scale += 10.0 * time.delta_seconds();
+        *alpha -= 5.0 * time.delta_secs();
+        *scale += 10.0 * time.delta_secs();
     }
 }
 
