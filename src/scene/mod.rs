@@ -66,11 +66,8 @@ fn setup(
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     commands.spawn((
-        Camera3dBundle {
-            transform: Transform::from_xyz(-2.5, 4.5, 9.0)
-                .looking_at(Vec3::new(0.0, 1.0, 0.0), Vec3::Y),
-            ..default()
-        },
+        Camera3d::default(),
+        Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::new(0.0, 1.0, 0.0), Vec3::Y),
         DistanceFog {
             color: Color::srgba(0.35, 0.48, 0.66, 1.0),
             directional_light_color: Color::srgba(1.0, 0.95, 0.85, 0.5),
@@ -86,18 +83,17 @@ fn setup(
     let shadow_config = CascadeShadowConfigBuilder {
         maximum_distance: 20.0,
         ..default()
-    };
+    }
+    .build();
 
-    commands.spawn(DirectionalLightBundle {
-        transform: Transform::from_xyz(0.0, 1.0, 0.0)
-            .looking_at(Vec3::new(-0.25, 0.0, -0.05), Vec3::Z),
-        directional_light: DirectionalLight {
+    commands.spawn((
+        DirectionalLight {
             shadows_enabled: true,
             ..default()
         },
-        cascade_shadow_config: shadow_config.build(),
-        ..default()
-    });
+        Transform::from_xyz(0.0, 1.0, 0.0).looking_at(Vec3::new(-0.25, 0.0, -0.05), Vec3::Z),
+        shadow_config,
+    ));
 
     commands.spawn((
         Mesh3d(meshes.add(Mesh::from(Cuboid::default()))),

@@ -48,9 +48,7 @@ impl Plugin for StateTransitionPlugin {
                 Update,
                 (
                     end_game
-                        .run_if(
-                            in_state(GameState::Dead).and_then(on_timer(Duration::from_secs(1))),
-                        )
+                        .run_if(in_state(GameState::Dead).and(on_timer(Duration::from_secs(1))))
                         .after(check_for_collisions),
                     (check_for_game_start, force_no_rotation).run_if(in_state(GameState::Ready)),
                     jump.run_if(in_state(GameState::Playing)),

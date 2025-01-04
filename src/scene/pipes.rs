@@ -33,11 +33,8 @@ impl Command for SpawnPipePair {
             let parent_components = (
                 Name::from("PipePair"),
                 PipePair,
-                VisibilityBundle::default(),
-                TransformBundle {
-                    local: parent_transform,
-                    ..default()
-                },
+                Visibility::default(),
+                parent_transform,
             );
 
             world.spawn(parent_components).with_children(|parent| {

@@ -46,40 +46,28 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 
     commands
         .spawn((
-            NodeBundle {
-                node: Node {
-                    width: Val::Percent(100.0),
-                    position_type: PositionType::Absolute,
-                    justify_content: JustifyContent::Center,
-                    align_items: AlignItems::FlexStart,
-                    ..default()
-                },
+            Node {
+                width: Val::Percent(100.0),
+                position_type: PositionType::Absolute,
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::FlexStart,
                 ..default()
             },
             IconParent,
         ))
         .with_children(|parent| {
             parent.spawn((
-                NodeBundle {
-                    node: icon_node.clone(),
-                    ..default()
-                },
+                icon_node.clone(),
                 ImageNode::new(asset_server.load("textures/prompts/left_mouse_button_light.png")),
             ));
 
             parent.spawn((
-                NodeBundle {
-                    node: icon_node.clone(),
-                    ..default()
-                },
+                icon_node.clone(),
                 ImageNode::new(asset_server.load("textures/prompts/xbox_a_green.png")),
             ));
 
             parent.spawn((
-                NodeBundle {
-                    node: icon_node_space.clone(),
-                    ..default()
-                },
+                icon_node_space.clone(),
                 ImageNode::new(asset_server.load("textures/prompts/space_light.png")),
             ));
         });

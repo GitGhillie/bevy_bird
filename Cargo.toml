@@ -7,6 +7,7 @@ license = "MIT OR Apache-2.0"
 [features]
 default = []
 web = []
+desktop = []
 
 max_difficulty = []
 dynamic_linking = ["bevy/dynamic_linking"]

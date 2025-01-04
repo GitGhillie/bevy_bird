@@ -93,29 +93,27 @@ fn setup(
         .id();
 
     let light1 = commands
-        .spawn(PointLightBundle {
-            point_light: PointLight {
+        .spawn((
+            PointLight {
                 intensity: 0.0,
                 color: ORANGE.into(),
                 shadows_enabled: true,
                 ..default()
             },
-            transform: Transform::from_xyz(0.4, 0.0, 0.0),
-            ..default()
-        })
+            Transform::from_xyz(0.4, 0.0, 0.0),
+        ))
         .id();
 
     let light2 = commands
-        .spawn(PointLightBundle {
-            point_light: PointLight {
+        .spawn((
+            PointLight {
                 intensity: 0.0,
                 color: ORANGE.into(),
                 shadows_enabled: true,
                 ..default()
             },
-            transform: Transform::from_xyz(0.05, -0.81, 0.0),
-            ..default()
-        })
+            Transform::from_xyz(0.05, -0.81, 0.0),
+        ))
         .id();
 
     commands

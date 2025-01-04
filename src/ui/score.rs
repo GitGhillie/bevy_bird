@@ -37,7 +37,7 @@ fn setup(mut commands: Commands) {
     //if !cfg!(target_arch = "wasm32") {
     commands.spawn((
         Text::new("0"),
-        TextFont::from_font_size(100.0),
+        TextFont::from_font_size(75.0),
         TextColor::WHITE,
         TextLayout::new_with_justify(JustifyText::Right),
         Node {
