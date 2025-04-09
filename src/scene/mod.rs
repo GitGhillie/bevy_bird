@@ -4,7 +4,8 @@ use avian3d::math::PI;
 use bevy::pbr::{CascadeShadowConfigBuilder, DirectionalLightShadowMap, NotShadowCaster};
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
-use bevy_turborand::prelude::*;
+use bevy_rand::prelude::*;
+use rand_core::RngCore;
 
 use pipes::PipePair;
 
@@ -23,9 +24,10 @@ impl Plugin for ScenePlugin {
             .insert_resource(AmbientLight {
                 color: Color::WHITE,
                 brightness: 500.0,
+                ..default()
             })
             .insert_resource(DirectionalLightShadowMap { size: 4096 })
-            .insert_resource(GlobalRng::new())
+            .add_plugins(EntropyPlugin::<WyRand>::default())
             .init_state::<AssetState>()
             .add_loading_state(
                 LoadingState::new(AssetState::Loading)
@@ -131,7 +133,7 @@ fn move_pipes(
 fn recycle_pipes(
     mut pipe_query: Query<&mut Transform, With<PipePair>>,
     scene_settings: Res<SceneSettings>,
-    mut rng_resource: ResMut<GlobalRng>,
+    mut rng_resource: GlobalEntropy<WyRand>,
 ) {
     let num_pipes = pipe_query.iter().len() as f32;
     let pipe_gap_x = scene_settings.pipe_gap_x;
@@ -139,10 +141,11 @@ fn recycle_pipes(
 
     for mut pipe_set in pipe_query.iter_mut() {
         if pipe_set.translation.x < out_of_view_bound {
+            // Create random f32 between 0.0 and 1.0
             let random_num = if cfg!(feature = "max_difficulty") {
-                rng_resource.f32().round()
+                (rng_resource.next_u32() as f32 / u32::MAX as f32).round()
             } else {
-                rng_resource.f32()
+                rng_resource.next_u32() as f32 / u32::MAX as f32
             };
 
             pipe_set.translation.x = pipe_gap_x * (num_pipes - 2.0);

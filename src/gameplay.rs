@@ -1,7 +1,7 @@
-use crate::player::controls::{check_for_game_start, jump};
 use crate::player::PlayerSettings;
+use crate::player::controls::{check_for_game_start, jump};
 use crate::scene::pipes::PipePair;
-use crate::scene::{spawn_level, SceneSettings};
+use crate::scene::{SceneSettings, spawn_level};
 
 use avian3d::math::Quaternion;
 use avian3d::prelude::*;
@@ -167,7 +167,7 @@ fn end_game(
     next_state.set(GameState::Ready);
 
     for ent in pipe_query.iter() {
-        commands.entity(ent).despawn_recursive();
+        commands.entity(ent).despawn();
     }
 }
 
@@ -190,7 +190,7 @@ fn scoring(
                 score_info.high_score = score_info.current_score;
             }
 
-            scored_event.send(ScoredEvent);
+            scored_event.write(ScoredEvent);
 
             #[cfg(feature = "debugging")]
             println!(
