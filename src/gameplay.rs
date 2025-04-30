@@ -63,7 +63,7 @@ impl Plugin for StateTransitionPlugin {
 
 fn start_game(
     mut commands: Commands,
-    mut player_query: Query<(Entity, &mut LinearVelocity), With<LockedAxes>>,
+    mut player_query: Single<(Entity, &mut LinearVelocity), With<LockedAxes>>,
     mut scene_settings: ResMut<SceneSettings>,
     player_settings: Res<PlayerSettings>,
     mut score_info: ResMut<ScoreInfo>,
@@ -71,18 +71,19 @@ fn start_game(
     scene_settings.pipe_speed = 5.0;
     score_info.current_score = 0;
 
-    for (player, mut velocity) in &mut player_query {
-        // Unlock the y translation
-        commands.entity(player).insert(
-            LockedAxes::ROTATION_LOCKED
-                .lock_translation_x()
-                .lock_translation_z(),
-        );
+    let player = player_query.0;
+    let velocity = &mut player_query.1;
 
-        // We need to jump when starting the game since the jump action is 'used up' when
-        // checking for the state transition from `Ready` to `Playing`.
-        velocity.y = player_settings.jump_velocity;
-    }
+    // Unlock the y translation
+    commands.entity(player).insert(
+        LockedAxes::ROTATION_LOCKED
+            .lock_translation_x()
+            .lock_translation_z(),
+    );
+
+    // We need to jump when starting the game since the jump action is 'used up' when
+    // checking for the state transition from `Ready` to `Playing`.
+    velocity.y = player_settings.jump_velocity;
 }
 
 fn ramp_up_speed(mut scene_settings: ResMut<SceneSettings>, time: Res<Time>) {
@@ -102,15 +103,13 @@ fn check_for_collisions(
     collisions: Collisions,
     mut scene_settings: ResMut<SceneSettings>,
     mut next_state: ResMut<NextState<GameState>>,
-    mut player_query: Query<Entity, With<LockedAxes>>,
+    player: Single<Entity, With<LockedAxes>>,
     mut commands: Commands,
 ) {
     if collisions.iter().next().is_some() {
         scene_settings.pipe_speed = 0.0;
 
-        for player in &mut player_query {
-            commands.entity(player).insert((LockedAxes::new(),));
-        }
+        commands.entity(*player).insert((LockedAxes::new(),));
 
         next_state.set(GameState::Dead);
     }
@@ -118,14 +117,12 @@ fn check_for_collisions(
 
 fn check_for_out_of_bounds(
     mut next_state: ResMut<NextState<GameState>>,
-    player_query: Query<&GlobalTransform, With<LockedAxes>>,
+    player: Single<&GlobalTransform, With<LockedAxes>>,
     mut scene_settings: ResMut<SceneSettings>,
 ) {
-    for player in &player_query {
-        if player.translation().y < -20.0 {
-            scene_settings.pipe_speed = 0.0;
-            next_state.set(GameState::Dead);
-        }
+    if player.translation().y < -20.0 {
+        scene_settings.pipe_speed = 0.0;
+        next_state.set(GameState::Dead);
     }
 }
 
@@ -133,33 +130,29 @@ fn check_for_out_of_bounds(
 // Without it the physics engine will sometimes apply a rotation the first frame
 // after respawning.
 fn force_no_rotation(
-    mut player_query: Query<&mut Rotation, With<LockedAxes>>,
+    mut player_rotation: Single<&mut Rotation, With<LockedAxes>>,
     player_settings: Res<PlayerSettings>,
 ) {
-    for mut player_rotation in &mut player_query {
-        **player_rotation = Quaternion::from_rotation_z(player_settings.initial_rotation);
-    }
+    ***player_rotation = Quaternion::from_rotation_z(player_settings.initial_rotation);
 }
 
 fn end_game(
     mut commands: Commands,
-    mut player_query: Query<Entity, With<LockedAxes>>,
+    player: Single<Entity, With<LockedAxes>>,
     mut next_state: ResMut<NextState<GameState>>,
     pipe_query: Query<Entity, With<PipePair>>,
     player_settings: Res<PlayerSettings>,
 ) {
     // todo: Factor out into something like a player-reset bundle
-    for player in &mut player_query {
-        commands.entity(player).insert((
-            LockedAxes::new()
-                .lock_translation_x()
-                .lock_translation_z()
-                .lock_translation_y(),
-            LinearVelocity::ZERO,
-            AngularVelocity::ZERO,
-            Transform::from_translation(player_settings.initial_position),
-        ));
-    }
+    commands.entity(*player).insert((
+        LockedAxes::new()
+            .lock_translation_x()
+            .lock_translation_z()
+            .lock_translation_y(),
+        LinearVelocity::ZERO,
+        AngularVelocity::ZERO,
+        Transform::from_translation(player_settings.initial_position),
+    ));
 
     next_state.set(GameState::Ready);
 
