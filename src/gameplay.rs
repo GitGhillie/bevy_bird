@@ -99,16 +99,13 @@ fn ramp_up_speed(mut scene_settings: ResMut<SceneSettings>, time: Res<Time>) {
 }
 
 fn check_for_collisions(
-    mut collision_event_reader: EventReader<Collision>,
+    collisions: Collisions,
     mut scene_settings: ResMut<SceneSettings>,
     mut next_state: ResMut<NextState<GameState>>,
     mut player_query: Query<Entity, With<LockedAxes>>,
     mut commands: Commands,
 ) {
-    if !collision_event_reader.is_empty() {
-        // Drain events so they don't cause issues later
-        for _ in collision_event_reader.read() {}
-
+    if collisions.iter().next().is_some() {
         scene_settings.pipe_speed = 0.0;
 
         for player in &mut player_query {
