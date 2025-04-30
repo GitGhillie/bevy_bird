@@ -44,31 +44,28 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         ..default()
     };
 
-    commands
-        .spawn((
-            Node {
-                width: Val::Percent(100.0),
-                position_type: PositionType::Absolute,
-                justify_content: JustifyContent::Center,
-                align_items: AlignItems::FlexStart,
-                ..default()
-            },
-            IconParent,
-        ))
-        .with_children(|parent| {
-            parent.spawn((
+    commands.spawn((
+        Node {
+            width: Val::Percent(100.0),
+            position_type: PositionType::Absolute,
+            justify_content: JustifyContent::Center,
+            align_items: AlignItems::FlexStart,
+            ..default()
+        },
+        IconParent,
+        children![
+            (
                 icon_node.clone(),
                 ImageNode::new(asset_server.load("textures/prompts/left_mouse_button_light.png")),
-            ));
-
-            parent.spawn((
+            ),
+            (
                 icon_node.clone(),
                 ImageNode::new(asset_server.load("textures/prompts/xbox_a_green.png")),
-            ));
-
-            parent.spawn((
+            ),
+            (
                 icon_node_space.clone(),
                 ImageNode::new(asset_server.load("textures/prompts/space_light.png")),
-            ));
-        });
+            )
+        ],
+    ));
 }
