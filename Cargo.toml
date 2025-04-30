@@ -39,20 +39,20 @@ strip = true
 lto = true
 
 [dependencies]
-avian3d  = { git = "https://github.com/Jondolf/avian.git", branch = "bevy-0.16" }
+avian3d  = { git = "https://github.com/Jondolf/avian.git", branch = "main" }
 leafwing-input-manager = { git = "https://github.com/Leafwing-Studios/leafwing-input-manager.git", branch = "main" }
-bevy_asset_loader = "0.23.0-rc.1"
-bevy_kira_audio = "0.23.0-rc.1"
-bevy_rand = { git = "https://github.com/Bluefinger/bevy_rand", branch = "prepare-v0.16", package = "bevy_rand", features = ["wyrand"] }
+bevy_asset_loader = { git = "https://github.com/NiklasEi/bevy_asset_loader.git", branch = "bevy_main" }
+bevy_kira_audio = "0.23.0"
+bevy_rand = { version = "0.10", features = ["wyrand"] }
 rand_core = "0.9"
 ron = "0.10"
 serde = { version = "1", features = ["derive"] }
 bevy_mod_debugdump = { version = "0.12", optional = true }
-bevy-inspector-egui = { version = "0.30", optional = true }
+bevy-inspector-egui = { version = "0.31", optional = true }
 
 # Needed for bevy_rand and wasm
 [target.'cfg(all(any(target_arch = "wasm32", target_arch = "wasm64"), target_os = "unknown"))'.dependencies]
-getrandom = { version = "0.2", features = ["js"] }
+getrandom = { version = "0.3", features = ["wasm_js"] }
 
 # todo: check if there are any more features that can be disabled (per platform as well?)
 [dependencies.bevy]
