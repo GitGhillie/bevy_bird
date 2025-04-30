@@ -67,10 +67,7 @@ fn setup(
             Collider::capsule(0.2, 0.7),
             SceneRoot(asset_server.load("objects/bird.glb#Scene0")),
             Transform::from_translation(player_settings.initial_position),
-            InputManagerBundle::<inputs::Action> {
-                input_map: inputs::create_input_map(),
-                ..default()
-            },
+            inputs::create_input_map(),
         ))
         .id();
 

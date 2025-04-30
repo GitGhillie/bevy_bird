@@ -1,7 +1,6 @@
 use crate::scene::{SceneAssets, SceneSettings};
 use avian3d::math::PI;
 use avian3d::prelude::*;
-use bevy::ecs::world::Command;
 use bevy::prelude::*;
 
 #[derive(Component, Reflect, Default, Debug)]
@@ -52,9 +51,7 @@ impl Command for SpawnPipePair {
                         Transform::from_xyz(0.0, -collider_length / 2.0, 0.0),
                     );
 
-                    parent.spawn(pipe_components).with_children(|parent| {
-                        parent.spawn(collider_components);
-                    });
+                    parent.spawn((pipe_components, children![collider_components]));
                 }
             });
         }
