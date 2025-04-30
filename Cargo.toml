@@ -51,8 +51,8 @@ bevy_mod_debugdump = { version = "0.12", optional = true }
 bevy-inspector-egui = { version = "0.31", optional = true }
 
 # Needed for bevy_rand and wasm
-[target.'cfg(all(any(target_arch = "wasm32", target_arch = "wasm64"), target_os = "unknown"))'.dependencies]
-getrandom = { version = "0.3", features = ["wasm_js"] }
+[target.'cfg(all(target_family = "wasm", any(target_os = "unknown", target_os = "none")))'.dependencies]
+bevy_rand = { version = "0.10", features = ["wasm_js"] }
 
 # todo: check if there are any more features that can be disabled (per platform as well?)
 [dependencies.bevy]
