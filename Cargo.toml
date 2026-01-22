@@ -39,24 +39,24 @@ strip = true
 lto = true
 
 [dependencies]
-avian3d  = "0.3"
-leafwing-input-manager = "0.17"
-bevy_asset_loader = "0.23"
-bevy_kira_audio = "0.23"
-bevy_rand = { version = "0.10", features = ["wyrand"] }
+avian3d  = "0.4"
+leafwing-input-manager = "0.19"
+bevy_asset_loader = "0.24"
+bevy_kira_audio = "0.24"
+bevy_rand = { version = "0.12", features = ["wyrand"] }
 rand_core = "0.9"
 ron = "0.10"
 serde = { version = "1", features = ["derive"] }
-bevy_mod_debugdump = { version = "0.12", optional = true }
-bevy-inspector-egui = { version = "0.31", optional = true }
+bevy_mod_debugdump = { version = "0.14", optional = true }
+bevy-inspector-egui = { version = "0.35", optional = true }
 
 # Needed for bevy_rand and wasm
 [target.'cfg(all(target_family = "wasm", any(target_os = "unknown", target_os = "none")))'.dependencies]
-bevy_rand = { version = "0.10", features = ["wasm_js"] }
+bevy_rand = { version = "0.12", features = ["wasm_js"] }
 
 # todo: check if there are any more features that can be disabled (per platform as well?)
 [dependencies.bevy]
-version = "0.16.0"
+version = "0.17.0"
 default-features = false
 features = [
     "bevy_asset",
@@ -73,6 +73,7 @@ features = [
     "png",
     "jpeg",
     "hdr",
+    "zstd_rust",
 #    "vorbis",
     "x11",
     "bevy_gizmos",

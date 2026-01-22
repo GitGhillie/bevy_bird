@@ -28,10 +28,10 @@ pub struct ScoreInfo {
 #[derive(Component)]
 struct Scored;
 
-#[derive(Event)]
+#[derive(Message)]
 pub struct ScoredEvent;
 
-#[derive(Event)]
+#[derive(Message)]
 pub struct JumpedEvent;
 
 pub struct StateTransitionPlugin;

@@ -3,8 +3,7 @@ pub(crate) mod inputs;
 
 use crate::gameplay::JumpedEvent;
 use avian3d::prelude::*;
-use bevy::pbr::NotShadowCaster;
-use bevy::prelude::*;
+use bevy::{light::NotShadowCaster, prelude::*};
 use leafwing_input_manager::prelude::*;
 
 use bevy::color::palettes::css::ORANGE;
@@ -121,7 +120,7 @@ fn setup(
 fn smoke_control(
     mut materials: ResMut<Assets<StandardMaterial>>,
     smoke_material_handle: Res<SmokeMaterialHandle>,
-    mut jump_event: EventReader<JumpedEvent>,
+    mut jump_event: MessageReader<JumpedEvent>,
     mut alpha: Local<f32>,
     mut scale: Local<f32>,
     time: Res<Time>,

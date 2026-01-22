@@ -1,7 +1,7 @@
 pub(crate) mod pipes;
 
 use avian3d::math::PI;
-use bevy::pbr::{CascadeShadowConfigBuilder, DirectionalLightShadowMap, NotShadowCaster};
+use bevy::light::{CascadeShadowConfigBuilder, DirectionalLightShadowMap, NotShadowCaster};
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
 use bevy_rand::prelude::*;
