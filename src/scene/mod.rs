@@ -21,7 +21,7 @@ impl Plugin for ScenePlugin {
                 pipe_spread: 4.0,
                 pipe_speed: 0.0,
             })
-            .insert_resource(AmbientLight {
+            .insert_resource(GlobalAmbientLight {
                 color: Color::WHITE,
                 brightness: 500.0,
                 ..default()

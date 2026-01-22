@@ -13,6 +13,8 @@ max_difficulty = []
 dynamic_linking = ["bevy/dynamic_linking"]
 debugging = [
     "bevy/debug",
+    "bevy/bevy_gizmos",
+    "bevy/bevy_gizmos_render",
     "dep:bevy_mod_debugdump",
     "dep:bevy-inspector-egui",
     "avian3d/debug-plugin"
@@ -40,24 +42,24 @@ strip = true
 lto = true
 
 [dependencies]
-avian3d  = "0.4"
-leafwing-input-manager = "0.19"
-bevy_asset_loader = "0.24"
-bevy_kira_audio = "0.24"
-bevy_rand = { version = "0.12", features = ["wyrand"] }
+avian3d  = "0.5"
+leafwing-input-manager = "0.20"
+bevy_asset_loader = "0.25"
+bevy_kira_audio = "0.25"
+bevy_rand = { version = "0.13", features = ["wyrand"] }
 rand_core = "0.9"
 ron = "0.10"
 serde = { version = "1", features = ["derive"] }
-bevy_mod_debugdump = { version = "0.14", optional = true }
-bevy-inspector-egui = { version = "0.35", optional = true }
+bevy_mod_debugdump = { version = "0.15", optional = true }
+bevy-inspector-egui = { version = "0.36", optional = true }
 
 # Needed for bevy_rand and wasm
 [target.'cfg(all(target_family = "wasm", any(target_os = "unknown", target_os = "none")))'.dependencies]
-bevy_rand = { version = "0.12", features = ["wasm_js"] }
+bevy_rand = { version = "0.13", features = ["wasm_js"] }
 
 # todo: check if there are any more features that can be disabled (per platform as well?)
 [dependencies.bevy]
-version = "0.17.0"
+version = "0.18"
 default-features = false
 features = [
     "bevy_asset",
@@ -80,7 +82,6 @@ features = [
     "zstd_rust",
 #    "vorbis",
     "x11",
-    "bevy_gizmos",
 #    "android_shared_stdcxx",
     "tonemapping_luts",
     "default_font",

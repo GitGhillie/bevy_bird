@@ -46,7 +46,7 @@ fn main() {
         use bevy_inspector_egui::bevy_egui::EguiPlugin;
         use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
-        app.add_plugins(PhysicsDebugPlugin::default())
+        app.add_plugins(PhysicsDebugPlugin)
             .add_plugins(EguiPlugin::default())
             .add_plugins(WorldInspectorPlugin::default());
 
