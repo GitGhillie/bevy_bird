@@ -39,10 +39,10 @@ strip = true
 lto = true
 
 [dependencies]
-avian3d  = { git = "https://github.com/Jondolf/avian.git", branch = "main" }
-leafwing-input-manager = { git = "https://github.com/Leafwing-Studios/leafwing-input-manager.git", branch = "main" }
-bevy_asset_loader = { git = "https://github.com/NiklasEi/bevy_asset_loader.git", branch = "bevy_main" }
-bevy_kira_audio = "0.23.0"
+avian3d  = "0.3"
+leafwing-input-manager = "0.17"
+bevy_asset_loader = "0.23"
+bevy_kira_audio = "0.23"
 bevy_rand = { version = "0.10", features = ["wyrand"] }
 rand_core = "0.9"
 ron = "0.10"
