@@ -24,7 +24,7 @@ fn setup(mut commands: Commands) {
         Text::new("0"),
         TextFont::from_font_size(100.0),
         TextColor(GOLD.into()),
-        TextLayout::new_with_justify(JustifyText::Center),
+        TextLayout::new_with_justify(Justify::Center),
         Node {
             position_type: PositionType::Absolute,
             justify_self: JustifySelf::Center,
@@ -39,7 +39,7 @@ fn setup(mut commands: Commands) {
         Text::new("0"),
         TextFont::from_font_size(75.0),
         TextColor::WHITE,
-        TextLayout::new_with_justify(JustifyText::Right),
+        TextLayout::new_with_justify(Justify::Right),
         Node {
             position_type: PositionType::Absolute,
             justify_self: JustifySelf::End,
@@ -51,7 +51,7 @@ fn setup(mut commands: Commands) {
 
 fn update_score(
     score_query: Query<Entity, With<ScoreText>>,
-    mut scored_event: EventReader<ScoredEvent>,
+    mut scored_event: MessageReader<ScoredEvent>,
     score_info: Res<ScoreInfo>,
     mut writer: TextUiWriter,
 ) {

@@ -20,7 +20,7 @@ impl Command for SpawnPipePair {
         if let Some(assets) = assets {
             let collider_length = 10.0;
 
-            let pipe_handle = assets.pipe.clone_weak();
+            let pipe_handle = assets.pipe.clone();
 
             let transform_lower = Transform::from_xyz(0.0, 0.0, 0.0);
             let mut transform_upper = Transform::from_xyz(0.0, scene_settings.pipe_gap_y, 0.0);
@@ -42,7 +42,7 @@ impl Command for SpawnPipePair {
                     let pipe_components = (
                         Name::from("Pipe"),
                         RigidBody::Kinematic,
-                        SceneRoot(pipe_handle.clone_weak()),
+                        SceneRoot(pipe_handle.clone()),
                         transform,
                     );
 

@@ -11,9 +11,6 @@ use avian3d::prelude::*;
 use bevy::asset::AssetMetaCheck;
 use bevy::prelude::*;
 
-#[cfg(feature = "debugging")]
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
-
 fn main() {
     let mut app = App::new();
 
@@ -46,7 +43,11 @@ fn main() {
 
     #[cfg(feature = "debugging")]
     {
+        use bevy_inspector_egui::bevy_egui::EguiPlugin;
+        use bevy_inspector_egui::quick::WorldInspectorPlugin;
+
         app.add_plugins(PhysicsDebugPlugin::default())
+            .add_plugins(EguiPlugin::default())
             .add_plugins(WorldInspectorPlugin::default());
 
         //bevy_mod_debugdump::print_schedule_graph(&mut app, Update);
