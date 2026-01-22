@@ -150,7 +150,7 @@ fn smoke_control(
 
 fn gunshot_lighting(
     mut light_query: Query<&mut PointLight>,
-    mut jump_event: EventReader<JumpedEvent>,
+    mut jump_event: MessageReader<JumpedEvent>,
 ) {
     let gunshot_event = !jump_event.is_empty();
     for _ in jump_event.read() {} // Clear the queue

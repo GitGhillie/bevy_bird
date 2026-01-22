@@ -9,7 +9,7 @@ use crate::player::inputs::Action;
 pub fn jump(
     query: Single<(&ActionState<Action>, &mut LinearVelocity)>,
     player_settings: Res<PlayerSettings>,
-    mut jumped_event: EventWriter<JumpedEvent>,
+    mut jumped_event: MessageWriter<JumpedEvent>,
 ) {
     let (action_state, mut velocity) = query.into_inner();
 

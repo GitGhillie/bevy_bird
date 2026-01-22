@@ -133,7 +133,7 @@ fn move_pipes(
 fn recycle_pipes(
     mut pipe_query: Query<&mut Transform, With<PipePair>>,
     scene_settings: Res<SceneSettings>,
-    mut rng_resource: GlobalEntropy<WyRand>,
+    mut rng_resource: Single<&mut WyRand, With<GlobalRng>>,
 ) {
     let num_pipes = pipe_query.iter().len() as f32;
     let pipe_gap_x = scene_settings.pipe_gap_x;

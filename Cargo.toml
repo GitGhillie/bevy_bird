@@ -12,6 +12,7 @@ desktop = []
 max_difficulty = []
 dynamic_linking = ["bevy/dynamic_linking"]
 debugging = [
+    "bevy/debug",
     "dep:bevy_mod_debugdump",
     "dep:bevy-inspector-egui",
     "avian3d/debug-plugin"
@@ -62,6 +63,8 @@ features = [
     "bevy_asset",
     "bevy_gilrs",
     "bevy_scene",
+    "bevy_state",
+    "reflect_auto_register",
     "bevy_winit",
     "bevy_core_pipeline",
     "bevy_pbr",
@@ -69,6 +72,7 @@ features = [
     "bevy_render",
     "bevy_text",
     "bevy_ui",
+    "bevy_ui_render",
     "multi_threaded",
     "png",
     "jpeg",

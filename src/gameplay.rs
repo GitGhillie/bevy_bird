@@ -40,8 +40,8 @@ impl Plugin for StateTransitionPlugin {
     fn build(&self, app: &mut App) {
         app.init_state::<GameState>()
             .insert_resource(ScoreInfo::default())
-            .add_event::<ScoredEvent>()
-            .add_event::<JumpedEvent>()
+            .add_message::<ScoredEvent>()
+            .add_message::<JumpedEvent>()
             .add_systems(OnEnter(GameState::Ready), spawn_level)
             .add_systems(OnEnter(GameState::Playing), start_game)
             .add_systems(
@@ -166,7 +166,7 @@ fn scoring(
     pipe_query: Query<(Entity, &Transform), (With<PipePair>, Without<Scored>)>,
     scored_pipe_query: Query<(Entity, &Transform), With<Scored>>,
     mut score_info: ResMut<ScoreInfo>,
-    mut scored_event: EventWriter<ScoredEvent>,
+    mut scored_event: MessageWriter<ScoredEvent>,
 ) {
     let score_boundary = 0.0;
 

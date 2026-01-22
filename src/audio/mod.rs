@@ -41,25 +41,25 @@ impl Plugin for GameAudioPlugin {
 }
 
 fn death_audio(audio_assets: Res<AudioAssets>, audio: Res<Audio>) {
-    audio.play(audio_assets.death.clone_weak());
+    audio.play(audio_assets.death.clone());
 }
 
 fn score_audio(
     audio_assets: Res<AudioAssets>,
     audio: Res<Audio>,
-    mut score_event: EventReader<ScoredEvent>,
+    mut score_event: MessageReader<ScoredEvent>,
 ) {
     for _ in score_event.read() {
-        audio.play(audio_assets.coin.clone_weak());
+        audio.play(audio_assets.coin.clone());
     }
 }
 
 fn jump_audio(
     audio_assets: Res<AudioAssets>,
     audio: Res<Audio>,
-    mut jump_event: EventReader<JumpedEvent>,
+    mut jump_event: MessageReader<JumpedEvent>,
 ) {
     for _ in jump_event.read() {
-        audio.play(audio_assets.gun.clone_weak());
+        audio.play(audio_assets.gun.clone());
     }
 }
